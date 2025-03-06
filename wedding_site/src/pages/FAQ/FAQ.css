@@ -1,0 +1,197 @@
+.faq-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+/* Page Introduction */
+.page-intro {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  color: var(--terracotta);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  display: inline-block;
+}
+
+.page-title::after {
+  content: "";
+  position: absolute;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--terracotta-light),
+    transparent
+  );
+  bottom: -10px;
+  left: 20%;
+}
+
+.intro-text {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-lg);
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--navy);
+}
+
+.flourish {
+  height: 30px;
+  margin: var(--spacing-md) auto;
+  background: url("../../assets/images/floral-design.png") center/contain
+    no-repeat;
+  width: 100px;
+}
+
+/* FAQ Section */
+.faq-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.faq-item {
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(232, 109, 92, 0.2);
+}
+
+.faq-question {
+  padding: var(--spacing-md) var(--spacing-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.faq-question:hover {
+  background-color: rgba(232, 109, 92, 0.05);
+}
+
+.faq-question.active {
+  background-color: rgba(232, 109, 92, 0.08);
+}
+
+.faq-question h3 {
+  font-family: var(--font-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin: 0;
+  flex: 1;
+}
+
+.faq-icon {
+  width: 22px;
+  height: 22px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.icon-line {
+  position: absolute;
+  background-color: var(--terracotta);
+  transition: all 0.3s ease;
+}
+
+.icon-line.horizontal {
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icon-line.vertical {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.icon-line.vertical.collapsed {
+  height: 0;
+}
+
+.faq-answer {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  overflow: hidden;
+}
+
+.faq-answer p {
+  margin: 0;
+  line-height: 1.8;
+  color: var(--navy);
+  font-size: 1.1rem;
+}
+
+/* Contact Section */
+.faq-contact {
+  text-align: center;
+  margin: var(--spacing-xl) 0;
+  padding: var(--spacing-lg);
+  background-color: rgba(232, 109, 92, 0.05);
+  border-radius: 12px;
+  position: relative;
+}
+
+.faq-contact h3 {
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  font-size: 1.8rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.faq-contact p {
+  font-size: 1.1rem;
+  color: var(--navy);
+}
+
+.faq-contact a {
+  color: var(--terracotta);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-bottom: 1px dashed var(--terracotta-light);
+}
+
+.faq-contact a:hover {
+  color: var(--terracotta-dark);
+  border-bottom: 1px solid var(--terracotta);
+}
+
+.closing-flourish {
+  height: 80px;
+  background: url("../../assets/images/floral-design.png") center/contain
+    no-repeat;
+  margin: var(--spacing-xl) auto;
+  width: 180px;
+  display: block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .faq-question h3 {
+    font-size: 1.1rem;
+  }
+
+  .faq-answer p {
+    font-size: 1rem;
+  }
+
+  .faq-contact h3 {
+    font-size: 1.5rem;
+  }
+}
