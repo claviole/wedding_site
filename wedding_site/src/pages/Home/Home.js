@@ -58,7 +58,9 @@ const Home = () => {
           transition={{ duration: 1.2 }}
         >
           <div className="monogram">C&D</div>
-          <h1 className="hero-title">Christian & Dimitra</h1>
+          <h1 className="hero-title">Christian</h1>
+          <h1 className="hero-title">&</h1>
+          <h1 className="hero-title">Dimitra</h1>
           <p className="wedding-date">October 19, 2025</p>
           <p className="wedding-location">Benton Harbor, Michigan</p>
           <Link to="/rsvp" className="rsvp-button">
@@ -128,7 +130,7 @@ const Home = () => {
           <p className="detail-location">Historic Barn</p>
           <p className="card-description">
             Celebrate with us as we enjoy dinner and dancing in the restored
-            authentic 1860s barn with its soaring cathedral ceiling and original
+            authentic 1930s barn with its soaring cathedral ceiling and original
             beams.
           </p>
         </motion.div>
