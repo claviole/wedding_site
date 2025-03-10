@@ -1,0 +1,330 @@
+/* Gallery Page Styles */
+.gallery-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Hero Section */
+.gallery-hero {
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("../../assets/images/hero-background.jpg") center/cover no-repeat;
+  color: white;
+  margin: -40px -20px 0;
+  text-align: center;
+  position: relative;
+}
+
+.gallery-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--spacing-lg);
+  max-width: 800px;
+  animation: fadeIn 1.5s ease-out;
+}
+
+.gallery-hero h1 {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-hero p {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.gallery-hero-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--spacing-md) 0;
+}
+
+.gallery-hero-divider .divider-line {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  flex-grow: 1;
+  max-width: 100px;
+}
+
+.gallery-hero-divider .divider-icon {
+  width: 30px;
+  height: 30px;
+  background: url("../../assets/images/maple-leaf.png") center/contain no-repeat;
+  margin: 0 var(--spacing-md);
+  filter: brightness(0) invert(1);
+}
+
+/* Intro Section */
+.gallery-intro {
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.intro-content h2 {
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  font-size: 2.3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.intro-content p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--navy);
+  margin-bottom: var(--spacing-md);
+}
+
+.flourish {
+  height: 30px;
+  background: url("../../assets/images/floral-design.png") center/contain no-repeat;
+  width: 100px;
+  margin: var(--spacing-md) auto 0;
+}
+
+/* Filter Tabs */
+.gallery-filter {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-md) 0;
+}
+
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.filter-tab {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--terracotta-light);
+  background-color: transparent;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  color: var(--navy);
+  transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+  background-color: var(--terracotta-light);
+  color: var(--navy);
+}
+
+.filter-tab.active {
+  background-color: var(--terracotta);
+  color: white;
+  border-color: var(--terracotta);
+}
+
+/* Gallery Grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gallery-item {
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-image {
+  height: 300px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item:hover .gallery-image img {
+  transform: scale(1.05);
+}
+
+.placeholder {
+  background: linear-gradient(135deg, var(--terracotta-light) 0%, var(--cream) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: shimmer 2s infinite;
+}
+
+.image-number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.image-caption {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+  font-family: var(--font-body);
+  color: var(--navy);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbox-image {
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lightbox-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lightbox-caption {
+  color: white;
+  text-align: center;
+  padding: var(--spacing-md);
+  font-family: var(--font-body);
+}
+
+.gallery-footer {
+  text-align: center;
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .gallery-hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .intro-content h2 {
+    font-size: 2rem;
+  }
+  
+  .gallery-image {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-tabs {
+    gap: var(--spacing-sm);
+  }
+  
+  .filter-tab {
+    padding: calc(var(--spacing-sm) / 2) var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+} 

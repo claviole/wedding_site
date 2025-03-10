@@ -27,6 +27,12 @@ const Layout = ({ children }) => {
               Gallery
             </Link>
             <Link
+              to="/registry"
+              className={location.pathname === "/registry" ? "active" : ""}
+            >
+              Registry
+            </Link>
+            <Link
               to="/faq"
               className={location.pathname === "/faq" ? "active" : ""}
             >

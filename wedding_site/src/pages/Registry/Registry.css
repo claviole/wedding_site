@@ -1,0 +1,342 @@
+/* Registry Page Styles */
+.registry-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Hero Section */
+.registry-hero {
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("../../assets/images/hero-background.jpg") center/cover no-repeat;
+  color: white;
+  margin: -40px -20px 0;
+  text-align: center;
+  position: relative;
+}
+
+.registry-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--spacing-lg);
+  max-width: 800px;
+}
+
+.registry-hero h1 {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.registry-hero p {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.hero-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--spacing-md) 0;
+}
+
+.hero-divider .divider-line {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  flex-grow: 1;
+  max-width: 100px;
+}
+
+.hero-divider .divider-icon {
+  width: 30px;
+  height: 30px;
+  background: url("../../assets/images/maple-leaf.png") center/contain no-repeat;
+  margin: 0 var(--spacing-md);
+  filter: brightness(0) invert(1);
+}
+
+/* Intro Section */
+.registry-intro {
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.intro-content h2 {
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  font-size: 2.3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.elegant-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--navy);
+  margin-bottom: var(--spacing-md);
+}
+
+.flourish {
+  height: 30px;
+  background: url("../../assets/images/floral-design.png") center/contain no-repeat;
+  width: 100px;
+  margin: var(--spacing-md) auto 0;
+}
+
+/* Registry Options */
+.registry-options {
+  padding: 0 var(--spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.registry-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.registry-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.card-icon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon img {
+  width: 100%;
+  height: auto;
+  opacity: 0.8;
+}
+
+.registry-card h3 {
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  font-size: 1.8rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.registry-description {
+  color: var(--navy);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.accent-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--terracotta);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+  padding: 0 var(--spacing-md);
+}
+
+.registry-button {
+  display: inline-block;
+  background-color: var(--terracotta);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: auto;
+}
+
+.registry-button:hover {
+  background-color: var(--terracotta-dark);
+  transform: translateY(-2px);
+}
+
+.secondary-button {
+  background-color: var(--sage);
+}
+
+.secondary-button:hover {
+  background-color: var(--navy);
+}
+
+/* Heartfelt Message Section */
+.heartfelt-message {
+  max-width: 800px;
+  margin: var(--spacing-lg) auto;
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.message-container {
+  padding: var(--spacing-lg);
+  background-color: var(--cream);
+  border-radius: 12px;
+  position: relative;
+}
+
+.message-container h3 {
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.message-container p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--navy);
+  margin-bottom: var(--spacing-md);
+}
+
+.closing-icon {
+  height: 30px;
+  background: url("../../assets/images/floral-design.png") center/contain no-repeat;
+  width: 100px;
+  margin: 0 auto;
+}
+
+.closing-flourish {
+  height: 60px;
+  background: url("../../assets/images/floral-design-with-curled-edges.png") center/contain no-repeat;
+  width: 220px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  display: block;
+  clear: both;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .registry-hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .registry-card-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .intro-content h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Payment Options Styles */
+.payment-options {
+  margin-top: 20px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.payment-intro {
+  font-family: var(--font-body);
+  color: var(--navy);
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.payment-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.payment-option-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: transform 0.2s, box-shadow 0.3s;
+  min-width: 140px;
+}
+
+.payment-option-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.payment-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.paypal {
+  background-color: #0070ba;
+  color: white;
+}
+
+.paypal:hover {
+  background-color: #005ea6;
+}
+
+.venmo {
+  background-color: #3d95ce;
+  color: white;
+}
+
+.venmo:hover {
+  background-color: #2a7db0;
+}
+
+.registry-button {
+  display: inline-block;
+  background-color: var(--terracotta);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: auto;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+.registry-button:hover {
+  background-color: var(--terracotta-dark);
+  transform: translateY(-2px);
+} 

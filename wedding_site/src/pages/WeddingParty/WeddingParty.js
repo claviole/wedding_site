@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./WeddingParty.css";
+import ethanPhoto from "../../assets/images/weddingParty/ethan.jpeg"; // Adjust the path as needed
 
 const WeddingParty = () => {
   // Animation variants
@@ -62,7 +63,7 @@ const WeddingParty = () => {
                 <div className="photo-placeholder"></div>
               </div>
               <h4 className="member-name">Sam Cagle</h4>
-              <p className="member-relation">Best Friend</p>
+              <p className="member-relation">Friend</p>
             </motion.div>
 
             <motion.div className="featured-member" variants={itemVariants}>
@@ -70,7 +71,7 @@ const WeddingParty = () => {
                 <div className="photo-placeholder"></div>
               </div>
               <h4 className="member-name">Richard Garza</h4>
-              <p className="member-relation">Best Friend</p>
+              <p className="member-relation">Friend</p>
             </motion.div>
           </div>
         </motion.div>
@@ -90,14 +91,16 @@ const WeddingParty = () => {
               </div>
               <h4 className="member-name">Joshua Laviolette</h4>
               <p className="member-relation">Brother</p>
+              
             </motion.div>
 
             <motion.div className="party-member" variants={itemVariants}>
               <div className="member-photo">
-                <div className="photo-placeholder"></div>
+                <img src={ethanPhoto} alt="Ethan Zajac" className="member-img" />
               </div>
               <h4 className="member-name">Ethan Zajac</h4>
               <p className="member-relation">Friend</p>
+              <p className="member-quote">"The only thing better than the open sky is big booty latinas"</p>
             </motion.div>
 
             <motion.div className="party-member" variants={itemVariants}>
@@ -154,7 +157,7 @@ const WeddingParty = () => {
               </div>
               <h4 className="member-name">Anthony Cagala</h4>
               <p className="member-title">Man of Honor</p>
-              <p className="member-relation">Best Friend</p>
+              <p className="member-relation">Friend</p>
             </motion.div>
 
             <motion.div className="featured-member" variants={itemVariants}>
@@ -163,7 +166,7 @@ const WeddingParty = () => {
               </div>
               <h4 className="member-name">Terra Cagle</h4>
               <p className="member-title">Maid of Honor</p>
-              <p className="member-relation">Best Friend</p>
+              <p className="member-relation">Friend</p>
             </motion.div>
 
             <motion.div className="featured-member" variants={itemVariants}>
@@ -191,7 +194,8 @@ const WeddingParty = () => {
                 <div className="photo-placeholder"></div>
               </div>
               <h4 className="member-name">Lydia Ciarrocchi</h4>
-              <p className="member-relation">Best Friend</p>
+              <p className="member-relation">Friend</p>
+              
             </motion.div>
           </div>
         </motion.div>

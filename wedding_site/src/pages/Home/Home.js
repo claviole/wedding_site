@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 import { motion } from "framer-motion";
+import engagementPhoto1 from "../../assets/images/homePage/D&C-46.jpg";
+import engagementPhoto2 from "../../assets/images/homePage/D&C-77.jpg";
+import engagementPhoto3 from "../../assets/images/homePage/D&C-132.jpg";
 
 const Home = () => {
   const [countdown, setCountdown] = useState({
@@ -199,19 +202,43 @@ const Home = () => {
         <div className="gallery-preview">
           <motion.div
             className="preview-image placeholder"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.25 }}
             transition={{ type: "spring", stiffness: 300 }}
-          ></motion.div>
+          >
+            <img 
+              src={engagementPhoto1} 
+              alt="Engagement Photo 1" 
+              style={{ 
+                width: "100%", 
+                height: "100%", 
+                objectFit: "cover", 
+                objectPosition: "calc(50% - 20px) center"
+              }} 
+            />
+          </motion.div>
           <motion.div
             className="preview-image placeholder"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
-          ></motion.div>
+          >
+            <img src={engagementPhoto2} alt="Engagement Photo 2" />
+          </motion.div>
           <motion.div
             className="preview-image placeholder"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
-          ></motion.div>
+          >
+            <img 
+              src={engagementPhoto3} 
+              alt="Engagement Photo 3" 
+              style={{ 
+                width: "100%", 
+                height: "100%", 
+                objectFit: "cover", 
+                objectPosition: "center calc(50% - 20px)"
+              }} 
+            />
+          </motion.div>
         </div>
         <Link to="/gallery" className="view-gallery-button">
           View Our Story

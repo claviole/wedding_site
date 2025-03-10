@@ -6,6 +6,7 @@ import FAQ from "./pages/FAQ/FAQ";
 import Gallery from "./pages/Gallery/Gallery";
 import RSVP from "./pages/RSVP/RSVP";
 import WeddingParty from "./pages/WeddingParty/WeddingParty";
+import Registry from "./pages/Registry/Registry";
 import "./styles/global.css";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/rsvp" element={<RSVP />} />
           <Route path="/wedding-party" element={<WeddingParty />} />
+          <Route path="/registry" element={<Registry />} />
         </Routes>
       </Layout>
     </Router>
