@@ -49,6 +49,25 @@ const FAQ = () => {
       answer:
         "Yes! Both the ceremony and reception will be held at the same venue, so there's no need for any extra travel. Just arrive, relax, and enjoy the celebration from start to finish!",
     },
+    {
+      id: 7,
+      question: "What accommodations are available for out-of-town guests?",
+      answerComponent: () => (
+        <p>
+          There are no official room blocks set, but there are plenty of hotels
+          in the area such as Courtyard by Marriott, St. Joseph/Benton Harbor.
+          You can find more information and make reservations at{" "}
+          <a
+            href="https://www.marriott.com/en-us/hotels/sbncb-courtyard-st-joseph-benton-harbor/overview/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            their website
+          </a>
+          .
+        </p>
+      ),
+    },
     // Additional FAQs will be added here
   ];
 
@@ -91,7 +110,9 @@ const FAQ = () => {
               <div className="faq-icon">
                 <div className="icon-line horizontal"></div>
                 <div
-                  className={`icon-line vertical ${expandedId === faq.id ? "collapsed" : ""}`}
+                  className={`icon-line vertical ${
+                    expandedId === faq.id ? "collapsed" : ""
+                  }`}
                 ></div>
               </div>
             </div>
@@ -105,7 +126,11 @@ const FAQ = () => {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p>{faq.answer}</p>
+                  {faq.answerComponent ? (
+                    faq.answerComponent()
+                  ) : (
+                    <p>{faq.answer}</p>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -117,8 +142,8 @@ const FAQ = () => {
         <h3>Still have questions?</h3>
         <p>
           Feel free to reach out to us directly at{" "}
-          <a href="mailto:christian.and.dimitra@example.com">
-            christian.and.dimitra@example.com
+          <a href="mailto:dimitravithoulkas@yahoo.com">
+            dimitravithoulkas@yahoo.com
           </a>
         </p>
       </div>
