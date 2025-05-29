@@ -21,6 +21,7 @@ import seanPhoto from "../../assets/images/weddingParty/sean.jpeg";
 import richandrachel from "../../assets/images/weddingParty/richandrachel.jpeg";
 import dimitraPhoto from "../../assets/images/weddingParty/dimitra.jpeg";
 import couplePhoto from "../../assets/images/galleryImages/D&C-71.jpg";
+import joshPhoto from "../../assets/images/weddingParty/josh.jpeg";
 const WeddingParty = () => {
   // Animation variants
   const containerVariants = {
@@ -176,10 +177,15 @@ const WeddingParty = () => {
           <div className="members-grid">
             <motion.div className="party-member" variants={itemVariants}>
               <div className="member-photo">
-                <div className="photo-placeholder"></div>
+                <img
+                  src={joshPhoto}
+                  alt="Joshua Laviolette"
+                  className="member-img"
+                />
               </div>
               <h4 className="member-name">Joshua Laviolette</h4>
               <p className="member-relation">Brother of The Groom</p>
+              <p className="member-quote">"Hi im Pudge!"</p>
             </motion.div>
 
             <motion.div className="party-member" variants={itemVariants}>
