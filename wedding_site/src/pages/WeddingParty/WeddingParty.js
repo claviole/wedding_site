@@ -19,6 +19,8 @@ import gracePhoto from "../../assets/images/weddingParty/grace.png";
 import lydiaPhoto from "../../assets/images/weddingParty/lydia.png";
 import seanPhoto from "../../assets/images/weddingParty/sean.jpeg";
 import richandrachel from "../../assets/images/weddingParty/richandrachel.jpeg";
+import dimitraPhoto from "../../assets/images/weddingParty/dimitra.jpeg";
+import couplePhoto from "../../assets/images/galleryImages/D&C-71.jpg";
 const WeddingParty = () => {
   // Animation variants
   const containerVariants = {
@@ -61,57 +63,55 @@ const WeddingParty = () => {
       <section className="party-section couple-section">
         <div className="section-header">
           <div className="header-line"></div>
-          <h2 className="section-title">The Bride & Groom</h2>
+          <h2 className="section-title">Our Story</h2>
           <div className="header-line"></div>
         </div>
 
         <motion.div
-          className="couple-container"
+          className="couple-story-container"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <div className="couple-row">
-            {/* Groom */}
-            <motion.div className="couple-card" variants={itemVariants}>
-              <div className="couple-photo">
-                <img src={groomPhoto} alt="Christian" className="couple-img" />
-              </div>
-              <div className="couple-details">
-                <h3 className="couple-name">Christian</h3>
-                <p className="couple-description">
-                  Christian is a software engineer with a passion for adventure
-                  and the outdoors. When he's not coding or hiking, he enjoys
-                  trying new recipes in the kitchen and playing guitar. He knew
-                  Dimitra was the one from their very first date.
+          <motion.div className="couple-story-card" variants={itemVariants}>
+            <div className="couple-story-photo">
+              <img
+                src={couplePhoto}
+                alt="Christian & Dimitra"
+                className="couple-story-img"
+              />
+            </div>
+            <div className="couple-story-content">
+              <h3 className="couple-story-title">Christian & Dimitra</h3>
+              <div className="story-text">
+                <p>
+                  Our love story began on March 15th, 2017, when we first
+                  connected on Tinder of all places! After a month of endless
+                  conversations and getting to know each other, we finally met
+                  in person on April 20th, 2017, at our first show together. The
+                  connection was instant and undeniable - so much so that we
+                  went to another show the very next day, where Christian asked
+                  Dimitra to be his girlfriend, despite knowing she was supposed
+                  to leave for college in California. Spoiler alert: he
+                  convinced her to stay!
                 </p>
-              </div>
-            </motion.div>
-
-            <div className="couple-divider">
-              <div className="divider-circle">
-                <span>&</span>
+                <p>
+                  After dating for several amazing years, Christian first
+                  proposed in December 2019, but then the world had other plans
+                  when COVID hit. Not to be deterred by a global pandemic, he
+                  reproposed at Lost Lands in 2022 - because nothing says
+                  "forever" quite like a proposal at a music festival! In 2023,
+                  we took the next big step by moving into our own place
+                  together and officially began wedding planning. Over the past
+                  8 years, we've traveled all over the country, experiencing
+                  life's adventures side by side, and we can't wait to make it
+                  official and continue this incredible journey as husband and
+                  wife.
+                </p>
               </div>
             </div>
-
-            {/* Bride */}
-            <motion.div className="couple-card" variants={itemVariants}>
-              <div className="couple-photo">
-                <img src={bridePhoto} alt="Dimitra" className="couple-img" />
-              </div>
-              <div className="couple-details">
-                <h3 className="couple-name">Dimitra</h3>
-                <p className="couple-description">
-                  Dimitra is a passionate educator and artist with a love for
-                  travel and culture. Her warm personality and creativity bring
-                  joy to everyone around her. She fell in love with Christian's
-                  kindness and sense of humor, and can't wait to start their
-                  next chapter together.
-                </p>
-              </div>
-            </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 

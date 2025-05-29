@@ -518,3 +518,70 @@
     margin: var(--spacing-md) 0;
   }
 }
+
+.couple-story-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.couple-story-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.couple-story-photo {
+  margin-bottom: 30px;
+}
+
+.couple-story-img {
+  width: 100%;
+  max-width: 500px;
+  height: 350px;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 5px solid #d4af37;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.couple-story-title {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-family: "Playfair Display", serif;
+}
+
+.story-text {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.story-text p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .couple-story-card {
+    padding: 30px 20px;
+  }
+
+  .couple-story-img {
+    height: 250px;
+  }
+
+  .couple-story-title {
+    font-size: 2rem;
+  }
+
+  .story-text p {
+    font-size: 1rem;
+  }
+}
