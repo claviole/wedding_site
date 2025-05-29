@@ -579,6 +579,26 @@
   box-shadow: 0 8px 25px rgba(232, 109, 92, 0.3);
 }
 
+/* Return Home Button */
+.return-home-btn {
+  background: var(--terracotta);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+
+.return-home-btn:hover {
+  background: var(--terracotta-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .rsvp-container {

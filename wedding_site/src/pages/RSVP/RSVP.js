@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { findGuestFileByName, submitRSVP } from "../../firebase/guestService";
 import "./RSVP.css";
 
 const RSVP = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1); // 1: name input, 2: guest selection, 3: contact info, 4: confirmation
   const [nameInput, setNameInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -118,6 +120,10 @@ const RSVP = () => {
     setIsSubmitted(false);
   };
 
+  const returnToHome = () => {
+    navigate("/");
+  };
+
   if (isSubmitted) {
     return (
       <div className="rsvp-container">
@@ -142,8 +148,8 @@ const RSVP = () => {
                 <strong>Contact Email:</strong> {contactInfo.email}
               </p>
             </div>
-            <button onClick={resetForm} className="new-rsvp-btn">
-              Submit Another RSVP
+            <button onClick={returnToHome} className="return-home-btn">
+              Return to Home
             </button>
           </div>
         </div>
