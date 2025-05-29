@@ -237,7 +237,7 @@
 }
 
 .guest-item.selected .guest-checkbox {
-  accent-color: white;
+  accent-color: var(--terracotta);
 }
 
 .guest-info {
