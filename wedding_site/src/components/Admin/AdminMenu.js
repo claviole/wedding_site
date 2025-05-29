@@ -31,6 +31,11 @@ const AdminMenu = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const handleViewRSVPs = () => {
+    navigate("/admin/view-rsvps");
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -62,7 +67,9 @@ const AdminMenu = ({ isOpen, onClose }) => {
           <div className="admin-dashboard">
             <h2>Admin Dashboard</h2>
             <div className="admin-buttons">
-              <button className="admin-menu-button">View RSVPs</button>
+              <button className="admin-menu-button" onClick={handleViewRSVPs}>
+                View RSVPs
+              </button>
               <button
                 className="admin-menu-button"
                 onClick={handleRSVPManagement}

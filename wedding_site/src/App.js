@@ -8,6 +8,7 @@ import Registry from "./pages/Registry/Registry";
 import FAQ from "./pages/FAQ/FAQ";
 import RSVP from "./pages/RSVP/RSVP";
 import RSVPManagement from "./pages/Admin/RSVPManagement";
+import RSVPViewer from "./pages/Admin/RSVPViewer";
 import "./styles/global.css";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           {/* Admin routes without layout */}
           <Route path="/admin/rsvp-management" element={<RSVPManagement />} />
+          <Route path="/admin/view-rsvps" element={<RSVPViewer />} />
 
           {/* Public routes with layout */}
           <Route

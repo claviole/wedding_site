@@ -142,13 +142,13 @@ export const submitRSVP = async (rsvpData) => {
 
 export const getRSVPs = async () => {
   try {
-    const q = query(
+    const rsvpsQuery = query(
       collection(db, RSVPS_COLLECTION),
       orderBy("submittedAt", "desc")
     );
-    const querySnapshot = await getDocs(q);
+    const rsvpsSnapshot = await getDocs(rsvpsQuery);
     const rsvps = [];
-    querySnapshot.forEach((doc) => {
+    rsvpsSnapshot.forEach((doc) => {
       rsvps.push({ id: doc.id, ...doc.data() });
     });
     return rsvps;
