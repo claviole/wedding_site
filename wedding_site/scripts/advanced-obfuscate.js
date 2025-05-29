@@ -33,13 +33,13 @@ const getObfuscationOptions = (level = "high") => {
       controlFlowFlatteningThreshold: 0.75,
       deadCodeInjection: true,
       deadCodeInjectionThreshold: 0.4,
-      debugProtection: true,
-      debugProtectionInterval: 2000,
-      disableConsoleOutput: true,
+      debugProtection: false,
+      debugProtectionInterval: false,
+      disableConsoleOutput: false,
       identifierNamesGenerator: "hexadecimal",
       numbersToExpressions: true,
       rotateStringArray: true,
-      selfDefending: true,
+      selfDefending: false,
       shuffleStringArray: true,
       simplify: true,
       splitStrings: true,
@@ -68,6 +68,7 @@ const getObfuscationOptions = (level = "high") => {
     stringArray: true,
     stringArrayThreshold: 0.5,
     transformObjectKeys: false,
+    selfDefending: false,
   };
 };
 

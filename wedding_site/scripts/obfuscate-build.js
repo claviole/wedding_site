@@ -4,22 +4,20 @@ const path = require("path");
 
 const buildDir = path.join(__dirname, "../build/static/js");
 
-// Obfuscation options
+// Updated obfuscation options - removed debug protection
 const obfuscationOptions = {
   compact: true,
   controlFlowFlattening: true,
   controlFlowFlatteningThreshold: 0.75,
   deadCodeInjection: true,
   deadCodeInjectionThreshold: 0.4,
-  debugProtection: true,
-  debugProtectionInterval: 2000,
-  disableConsoleOutput: true,
+  disableConsoleOutput: false, // Changed to false to avoid issues
   identifierNamesGenerator: "hexadecimal",
   log: false,
   numbersToExpressions: true,
   renameGlobals: false,
   rotateStringArray: true,
-  selfDefending: true,
+  selfDefending: false, // Changed to false - this can cause issues in production
   shuffleStringArray: true,
   simplify: true,
   splitStrings: true,
