@@ -41,7 +41,7 @@ const FAQ = () => {
       id: 5,
       question: "What is the dress code?",
       answer:
-        "Our wedding will be semi-formal, so we kindly ask that guests dress appropriately—think dress shirts, slacks, cocktail dresses, or something equally polished. Please, no shorts, jeans, or overly casual attire. And, of course, a friendly reminder: do not wear white… unless you'd like to risk an accidental wine spill. Fair warning! 😉",
+        "Our wedding will be formal, so we kindly ask that guests dress appropriately—think dress shirts, suits, slacks, cocktail dresses, or something equally polished. Please, no shorts, jeans, or overly casual attire. And, of course, a friendly reminder: do not wear white… unless you'd like to risk an accidental wine spill. Fair warning! 😉",
     },
     {
       id: 6,

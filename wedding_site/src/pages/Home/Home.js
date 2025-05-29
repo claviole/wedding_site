@@ -205,15 +205,15 @@ const Home = () => {
             whileHover={{ scale: 1.25 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <img 
-              src={engagementPhoto1} 
-              alt="Engagement Photo 1" 
-              style={{ 
-                width: "100%", 
-                height: "100%", 
-                objectFit: "cover", 
-                objectPosition: "calc(50% - 20px) center"
-              }} 
+            <img
+              src={engagementPhoto1}
+              alt="Engagement Photo 1"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "calc(50% - 20px) center",
+              }}
             />
           </motion.div>
           <motion.div
@@ -228,15 +228,15 @@ const Home = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <img 
-              src={engagementPhoto3} 
-              alt="Engagement Photo 3" 
-              style={{ 
-                width: "100%", 
-                height: "100%", 
-                objectFit: "cover", 
-                objectPosition: "center calc(50% - 20px)"
-              }} 
+            <img
+              src={engagementPhoto3}
+              alt="Engagement Photo 3"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center calc(50% - 20px)",
+              }}
             />
           </motion.div>
         </div>
@@ -244,8 +244,6 @@ const Home = () => {
           View Our Story
         </Link>
       </motion.section>
-
-      <div className="closing-flourish"></div>
     </div>
   );
 };

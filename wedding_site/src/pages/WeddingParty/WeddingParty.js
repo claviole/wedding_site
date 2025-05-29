@@ -203,9 +203,10 @@ const WeddingParty = () => {
               </div>
               <h4 className="member-name">Bryce Vann</h4>
               <p className="member-relation">Friend</p>
+              <p className="member-quote">"I'm just playing my slice"</p>
             </motion.div>
 
-            <motion.div className="party-member" variants={itemVariants}>
+            <motion.div className="party-member" vsariants={itemVariants}>
               <div className="member-photo">
                 <img
                   src={sebastianPhoto}

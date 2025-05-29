@@ -131,8 +131,16 @@ body {
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
-  text-align: center;
-  color: var(--navy);
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
 /* Responsive adjustments */
@@ -155,4 +163,29 @@ body {
   .site-title {
     font-size: 2rem;
   }
+}
+
+.admin-access-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-access-btn:hover {
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-access-btn:active {
+  transform: scale(0.95);
 }

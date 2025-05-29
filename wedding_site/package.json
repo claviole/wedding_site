@@ -15,6 +15,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:obfuscated": "react-scripts build && node scripts/obfuscate-build.js",
+    "build:production": "npm run build:obfuscated",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -37,6 +39,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "javascript-obfuscator": "^4.0.2",
+    "webpack-obfuscator": "^3.5.1"
   }
 }

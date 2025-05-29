@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import AdminMenu from "../Admin/AdminMenu";
 import "./Layout.css";
 
 const Layout = ({ children }) => {
   const location = useLocation();
+  const [adminClicks, setAdminClicks] = useState(0);
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+
+  const handleAdminClick = () => {
+    setAdminClicks((prev) => prev + 1);
+
+    // Reset after 3 seconds if not completed
+    setTimeout(() => setAdminClicks(0), 3000);
+
+    // Open admin menu after 5 clicks
+    if (adminClicks >= 4) {
+      setAdminMenuOpen(true);
+      setAdminClicks(0);
+    }
+  };
 
   return (
     <div className="layout">
@@ -38,14 +54,12 @@ const Layout = ({ children }) => {
             >
               FAQ
             </Link>
-            {/* 
             <Link
               to="/rsvp"
               className={`${location.pathname === "/rsvp" ? "active" : ""} rsvp-link`}
             >
               RSVP
             </Link>
-            */}
           </nav>
         </div>
       </header>
@@ -53,8 +67,20 @@ const Layout = ({ children }) => {
       <footer className="footer">
         <div className="footer-content">
           <p>&copy; {new Date().getFullYear()} Christian & Dimitra</p>
+          <button
+            onClick={handleAdminClick}
+            className="admin-access-btn"
+            title={`Click ${5 - adminClicks} more times to access admin`}
+          >
+            {adminClicks > 0 ? `${adminClicks}/5` : "•"}
+          </button>
         </div>
       </footer>
+
+      <AdminMenu
+        isOpen={adminMenuOpen}
+        onClose={() => setAdminMenuOpen(false)}
+      />
     </div>
   );
 };
