@@ -17,6 +17,8 @@ import terraPhoto from "../../assets/images/weddingParty/terra.jpg";
 import hannahPhoto from "../../assets/images/weddingParty/hannah.jpg";
 import gracePhoto from "../../assets/images/weddingParty/grace.png";
 import lydiaPhoto from "../../assets/images/weddingParty/lydia.png";
+import seanPhoto from "../../assets/images/weddingParty/sean.jpeg";
+import richandrachel from "../../assets/images/weddingParty/richandrachel.jpeg";
 const WeddingParty = () => {
   // Animation variants
   const containerVariants = {
@@ -147,10 +149,18 @@ const WeddingParty = () => {
 
             <motion.div className="featured-member" variants={itemVariants}>
               <div className="member-photo">
-                <div className="photo-placeholder"></div>
+                <img
+                  src={richandrachel}
+                  alt="Richard and Rachel"
+                  className="member-img"
+                />
               </div>
               <h4 className="member-name">Richard Garza</h4>
               <p className="member-relation">Friend</p>
+              <p className="member-quote">
+                "Liquor befire beere, you're in the clear. Beer before
+                liqour...... you're in the clear"
+              </p>
             </motion.div>
           </div>
         </motion.div>
@@ -205,14 +215,24 @@ const WeddingParty = () => {
               </div>
               <h4 className="member-name">Sebastian</h4>
               <p className="member-relation">Friend</p>
+              <p className="member-quote">
+                "Dont't hurt yourself, we might need you later"
+              </p>
             </motion.div>
 
             <motion.div className="party-member" variants={itemVariants}>
               <div className="member-photo">
-                <div className="photo-placeholder"></div>
+                <img
+                  src={seanPhoto}
+                  alt="Sean Rutledge"
+                  className="member-img"
+                />
               </div>
               <h4 className="member-name">Sean Rutledge</h4>
               <p className="member-relation">Friend</p>
+              <p className="member-quote">
+                "Hey, my name is Sean and I have a basketball game tomorrow"
+              </p>
             </motion.div>
           </div>
         </motion.div>
@@ -372,10 +392,17 @@ const WeddingParty = () => {
 
             <motion.div className="party-member" variants={itemVariants}>
               <div className="member-photo">
-                <div className="photo-placeholder"></div>
+                <img
+                  src={richandrachel}
+                  alt="Richard and Rachel"
+                  className="member-img"
+                />
               </div>
               <h4 className="member-name">Rachel Cuza</h4>
               <p className="member-relation">Friend</p>
+              <p className="member-quote">
+                "Don't be salty unless you have tequila"
+              </p>
             </motion.div>
 
             <motion.div className="party-member" variants={itemVariants}>
