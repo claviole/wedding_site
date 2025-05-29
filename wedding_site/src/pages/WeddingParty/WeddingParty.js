@@ -439,8 +439,6 @@ const WeddingParty = () => {
           </div>
         </motion.div>
       </section>
-
-      <div className="closing-flourish"></div>
     </div>
   );
 };

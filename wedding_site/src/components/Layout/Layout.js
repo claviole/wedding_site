@@ -38,12 +38,14 @@ const Layout = ({ children }) => {
             >
               FAQ
             </Link>
+            {/* 
             <Link
               to="/rsvp"
               className={`${location.pathname === "/rsvp" ? "active" : ""} rsvp-link`}
             >
               RSVP
             </Link>
+            */}
           </nav>
         </div>
       </header>

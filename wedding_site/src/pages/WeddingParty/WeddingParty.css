@@ -1,7 +1,8 @@
 .wedding-party-page {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: 0 20px;
 }
 
 /* Page Introduction */
@@ -248,15 +249,26 @@
 }
 
 .closing-flourish {
-  height: 80px;
-  background: url("../../assets/images/floral-design.png") center/contain
-    no-repeat;
-  margin: var(--spacing-xl) auto;
-  width: 180px;
+  width: 150px;
+  height: 150px;
+  background-image: url("../../assets/images/floral-design.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 80px auto 60px auto;
   display: block;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+}
+
+/* Make it even larger on bigger screens */
+@media (min-width: 768px) {
+  .closing-flourish {
+    width: 180px;
+    height: 180px;
+    margin: 100px auto 80px auto;
+  }
 }
 
 /* Animations */
