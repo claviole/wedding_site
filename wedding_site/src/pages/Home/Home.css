@@ -556,4 +556,42 @@
     max-width: 95%;
     font-size: 1.1rem;
   }
+
+  /* Fix details section for mobile */
+  .details-section {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .detail-card {
+    padding: var(--spacing-md);
+  }
+
+  .detail-card h3 {
+    font-size: 1.5rem;
+  }
+
+  .detail-time {
+    font-size: 1.2rem;
+  }
+
+  .detail-location {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-section {
+    padding: 0 10px;
+  }
+
+  .detail-card {
+    padding: var(--spacing-sm);
+  }
+
+  .card-icon {
+    width: 50px;
+    height: 50px;
+  }
 }
