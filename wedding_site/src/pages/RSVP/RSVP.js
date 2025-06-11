@@ -20,7 +20,7 @@ const RSVP = () => {
 
   // Search for guests as user types
   useEffect(() => {
-    if (nameInput.length >= 3) {
+    if (nameInput.length >= 5) {
       if (searchTimeout) {
         clearTimeout(searchTimeout);
       }
@@ -211,6 +211,13 @@ const RSVP = () => {
           <div className="step-section">
             <h2>Who's Coming?</h2>
             <p>Please select who will be attending from your invitation:</p>
+            <div className="guest-list-notice">
+              <p className="notice-text">
+                <strong>Note:</strong> These are the people from your household
+                we would like to invite. If you believe someone is missing,
+                please contact us so we can take a look.
+              </p>
+            </div>
 
             <div className="guest-selection">
               <div className="guest-list">

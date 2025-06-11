@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: 
+  background:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url("../../assets/images/hero-background.jpg") center/cover no-repeat;
   color: white;
@@ -96,7 +96,8 @@
 
 .flourish {
   height: 30px;
-  background: url("../../assets/images/floral-design.png") center/contain no-repeat;
+  background: url("../../assets/images/floral-design.png") center/contain
+    no-repeat;
   width: 100px;
   margin: var(--spacing-md) auto 0;
 }
@@ -172,8 +173,19 @@
   text-decoration: none;
   font-weight: 500;
   letter-spacing: 1px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
   margin-top: auto;
+}
+.payment-option-button.honeyfund {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+  color: white;
+}
+
+.payment-option-button.honeyfund:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #ff7575 100%);
+  transform: translateY(-2px);
 }
 
 .registry-button:hover {
@@ -220,14 +232,16 @@
 
 .closing-icon {
   height: 30px;
-  background: url("../../assets/images/floral-design.png") center/contain no-repeat;
+  background: url("../../assets/images/floral-design.png") center/contain
+    no-repeat;
   width: 100px;
   margin: 0 auto;
 }
 
 .closing-flourish {
   height: 60px;
-  background: url("../../assets/images/floral-design-with-curled-edges.png") center/contain no-repeat;
+  background: url("../../assets/images/floral-design-with-curled-edges.png")
+    center/contain no-repeat;
   width: 220px;
   position: relative;
   left: 50%;
@@ -246,11 +260,11 @@
   .registry-hero h1 {
     font-size: 2.5rem;
   }
-  
+
   .registry-card-container {
     grid-template-columns: 1fr;
   }
-  
+
   .intro-content h2 {
     font-size: 2rem;
   }
@@ -286,7 +300,9 @@
   border-radius: 30px;
   text-decoration: none;
   font-weight: 500;
-  transition: transform 0.2s, box-shadow 0.3s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.3s;
   min-width: 140px;
 }
 
@@ -328,7 +344,9 @@
   text-decoration: none;
   font-weight: 500;
   letter-spacing: 1px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
   margin-top: auto;
   border: none;
   cursor: pointer;
@@ -339,4 +357,4 @@
 .registry-button:hover {
   background-color: var(--terracotta-dark);
   transform: translateY(-2px);
-} 
+}

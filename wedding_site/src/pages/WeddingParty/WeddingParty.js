@@ -185,7 +185,9 @@ const WeddingParty = () => {
               </div>
               <h4 className="member-name">Joshua Laviolette</h4>
               <p className="member-relation">Brother of The Groom</p>
-              <p className="member-quote">"Hi im Pudge!"</p>
+              <p className="member-quote">
+                "Dissapointing my parents is my favorite hobby"
+              </p>
             </motion.div>
 
             <motion.div className="party-member" variants={itemVariants}>
