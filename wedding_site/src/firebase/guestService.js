@@ -8,6 +8,7 @@ import {
   query,
   orderBy,
   where,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "./config";
 
@@ -22,12 +23,7 @@ export const addGuestFile = async (guestFileData) => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
-    return {
-      id: docRef.id,
-      ...guestFileData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    return docRef.id;
   } catch (error) {
     console.error("Error adding guest file:", error);
     throw error;
@@ -38,13 +34,18 @@ export const getGuestFiles = async () => {
   try {
     const q = query(
       collection(db, GUEST_FILES_COLLECTION),
-      orderBy("createdAt", "desc")
+      orderBy("primaryName")
     );
     const querySnapshot = await getDocs(q);
     const guestFiles = [];
+
     querySnapshot.forEach((doc) => {
-      guestFiles.push({ id: doc.id, ...doc.data() });
+      guestFiles.push({
+        id: doc.id,
+        ...doc.data(),
+      });
     });
+
     return guestFiles;
   } catch (error) {
     console.error("Error getting guest files:", error);
@@ -52,88 +53,122 @@ export const getGuestFiles = async () => {
   }
 };
 
-export const deleteGuestFile = async (guestFileId) => {
+export const deleteGuestFile = async (id) => {
   try {
-    await deleteDoc(doc(db, GUEST_FILES_COLLECTION, guestFileId));
-    return guestFileId;
+    await deleteDoc(doc(db, GUEST_FILES_COLLECTION, id));
   } catch (error) {
     console.error("Error deleting guest file:", error);
     throw error;
   }
 };
 
-export const updateGuestFile = async (guestFileId, guestFileData) => {
+export const updateGuestFile = async (id, guestFileData) => {
   try {
-    const guestFileRef = doc(db, GUEST_FILES_COLLECTION, guestFileId);
-    const updateData = {
+    const docRef = doc(db, GUEST_FILES_COLLECTION, id);
+    await updateDoc(docRef, {
       ...guestFileData,
       updatedAt: new Date().toISOString(),
-    };
-    await updateDoc(guestFileRef, updateData);
-    return { id: guestFileId, ...updateData };
+    });
   } catch (error) {
     console.error("Error updating guest file:", error);
     throw error;
   }
 };
 
-// Enhanced search function for RSVP - excludes already RSVP'd guests
-export const findGuestFileByName = async (guestName) => {
+// Enhanced function to find guest file by name and check RSVP status
+export const findGuestFileByName = async (searchName) => {
   try {
-    // Get all guest files
-    const guestFilesQuery = query(collection(db, GUEST_FILES_COLLECTION));
-    const guestFilesSnapshot = await getDocs(guestFilesQuery);
-    const guestFiles = [];
-    guestFilesSnapshot.forEach((doc) => {
-      guestFiles.push({ id: doc.id, ...doc.data() });
-    });
-
-    // Get all existing RSVPs to exclude them
-    const rsvpsQuery = query(collection(db, RSVPS_COLLECTION));
-    const rsvpsSnapshot = await getDocs(rsvpsQuery);
-    const rsvpedGuestFileIds = new Set();
-    rsvpsSnapshot.forEach((doc) => {
-      const rsvpData = doc.data();
-      rsvpedGuestFileIds.add(rsvpData.guestFileId);
-    });
-
-    // Filter out guest files that have already RSVP'd
-    const availableGuestFiles = guestFiles.filter(
-      (file) => !rsvpedGuestFileIds.has(file.id)
+    const guestFilesSnapshot = await getDocs(
+      collection(db, GUEST_FILES_COLLECTION)
     );
+    const searchLower = searchName.toLowerCase().trim();
 
-    // Search for guest in primary name or additional guests from available files
-    const foundFiles = availableGuestFiles.filter((file) => {
-      const primaryMatch = file.primaryName
+    for (const docSnapshot of guestFilesSnapshot.docs) {
+      const guestFile = { id: docSnapshot.id, ...docSnapshot.data() };
+
+      // Check if search name matches primary guest or any additional guest
+      const primaryMatch = guestFile.primaryName
         .toLowerCase()
-        .includes(guestName.toLowerCase());
-      const additionalMatch = file.additionalGuests.some((guest) =>
-        guest.toLowerCase().includes(guestName.toLowerCase())
+        .includes(searchLower);
+      const additionalMatch = guestFile.additionalGuests.some((name) =>
+        name.toLowerCase().includes(searchLower)
       );
-      return primaryMatch || additionalMatch;
-    });
 
-    // Return the best match (exact match first, then partial matches)
-    const exactMatch = foundFiles.find(
-      (file) =>
-        file.primaryName.toLowerCase() === guestName.toLowerCase() ||
-        file.additionalGuests.some(
-          (guest) => guest.toLowerCase() === guestName.toLowerCase()
-        )
-    );
+      if (primaryMatch || additionalMatch) {
+        // Get existing RSVP for this guest file if it exists
+        const existingRSVP = await getExistingRSVP(guestFile.id);
 
-    return exactMatch || foundFiles[0] || null;
+        return {
+          ...guestFile,
+          existingRSVP: existingRSVP,
+        };
+      }
+    }
+
+    return null;
   } catch (error) {
-    console.error("Error finding guest file by name:", error);
+    console.error("Error finding guest file:", error);
     throw error;
   }
 };
 
-// RSVP Functions
+// Get existing RSVP for a guest file
+export const getExistingRSVP = async (guestFileId) => {
+  try {
+    const q = query(
+      collection(db, RSVPS_COLLECTION),
+      where("guestFileId", "==", guestFileId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const rsvpDoc = querySnapshot.docs[0];
+      return {
+        id: rsvpDoc.id,
+        ...rsvpDoc.data(),
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error getting existing RSVP:", error);
+    throw error;
+  }
+};
+
+// RSVP Functions - Updated to handle partial RSVPs
 export const submitRSVP = async (rsvpData) => {
   try {
-    const docRef = await addDoc(collection(db, RSVPS_COLLECTION), rsvpData);
-    return { id: docRef.id, ...rsvpData };
+    // Check if an RSVP already exists for this guest file
+    const existingRSVP = await getExistingRSVP(rsvpData.guestFileId);
+
+    if (existingRSVP) {
+      // Update existing RSVP by merging the attending guests
+      const mergedAttendingGuests = [
+        ...new Set([
+          ...existingRSVP.attendingGuests,
+          ...rsvpData.attendingGuests,
+        ]),
+      ];
+
+      const updatedRSVPData = {
+        ...existingRSVP,
+        attendingGuests: mergedAttendingGuests,
+        totalAttending: mergedAttendingGuests.length,
+        lastUpdatedAt: new Date().toISOString(),
+        // Update contact info if provided
+        ...(rsvpData.contactEmail && { contactEmail: rsvpData.contactEmail }),
+        ...(rsvpData.contactPhone && { contactPhone: rsvpData.contactPhone }),
+      };
+
+      const docRef = doc(db, RSVPS_COLLECTION, existingRSVP.id);
+      await updateDoc(docRef, updatedRSVPData);
+      return existingRSVP.id;
+    } else {
+      // Create new RSVP
+      const docRef = await addDoc(collection(db, RSVPS_COLLECTION), rsvpData);
+      return docRef.id;
+    }
   } catch (error) {
     console.error("Error submitting RSVP:", error);
     throw error;
@@ -142,15 +177,20 @@ export const submitRSVP = async (rsvpData) => {
 
 export const getRSVPs = async () => {
   try {
-    const rsvpsQuery = query(
+    const q = query(
       collection(db, RSVPS_COLLECTION),
       orderBy("submittedAt", "desc")
     );
-    const rsvpsSnapshot = await getDocs(rsvpsQuery);
+    const querySnapshot = await getDocs(q);
     const rsvps = [];
-    rsvpsSnapshot.forEach((doc) => {
-      rsvps.push({ id: doc.id, ...doc.data() });
+
+    querySnapshot.forEach((doc) => {
+      rsvps.push({
+        id: doc.id,
+        ...doc.data(),
+      });
     });
+
     return rsvps;
   } catch (error) {
     console.error("Error getting RSVPs:", error);
@@ -158,20 +198,11 @@ export const getRSVPs = async () => {
   }
 };
 
-export const getRSVPByGuestFile = async (guestFileId) => {
+export const deleteRSVP = async (id) => {
   try {
-    const q = query(
-      collection(db, RSVPS_COLLECTION),
-      where("guestFileId", "==", guestFileId)
-    );
-    const querySnapshot = await getDocs(q);
-    const rsvps = [];
-    querySnapshot.forEach((doc) => {
-      rsvps.push({ id: doc.id, ...doc.data() });
-    });
-    return rsvps[0] || null; // Return first RSVP or null
+    await deleteDoc(doc(db, RSVPS_COLLECTION, id));
   } catch (error) {
-    console.error("Error getting RSVP by guest file:", error);
+    console.error("Error deleting RSVP:", error);
     throw error;
   }
 };

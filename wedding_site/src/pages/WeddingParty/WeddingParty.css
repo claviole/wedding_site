@@ -410,6 +410,15 @@
   transition: transform 0.3s ease;
 }
 
+/* Specific positioning adjustments for photos that are cut off at the top */
+.member-img[alt="Terra Cagle"] {
+  object-position: center 20%;
+}
+
+.member-img[alt="Sebastian"] {
+  object-position: center 20%;
+}
+
 .member-photo:hover .member-img {
   transform: scale(1.05);
 }

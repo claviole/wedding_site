@@ -9,6 +9,7 @@ import FAQ from "./pages/FAQ/FAQ";
 import RSVP from "./pages/RSVP/RSVP";
 import RSVPManagement from "./pages/Admin/RSVPManagement";
 import RSVPViewer from "./pages/Admin/RSVPViewer";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import "./styles/global.css";
 
 // Import photo preloader to start background loading
@@ -18,6 +19,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <ScrollToTop />
         <Routes>
           {/* Admin routes without layout */}
           <Route path="/admin/rsvp-management" element={<RSVPManagement />} />

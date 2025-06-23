@@ -159,7 +159,7 @@ const WeddingParty = () => {
               <h4 className="member-name">Richard Garza</h4>
               <p className="member-relation">Friend</p>
               <p className="member-quote">
-                "Liquor befire beere, you're in the clear. Beer before
+                "Liquor before beer, you're in the clear. Beer before
                 liqour...... you're in the clear"
               </p>
             </motion.div>
