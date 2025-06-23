@@ -1,48 +1,80 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import "./Gallery.css";
-// Import the image
-import engagementPhoto1 from "../../assets/images/galleryImages/D&C-71.jpg";
 
 const Gallery = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // This will be replaced with your actual engagement photos
-  const galleryImages = [
-    { id: 1, src: engagementPhoto1, alt: "Engagement photo 1", category: "Engagement" },
-    { id: 2, alt: "Engagement photo 2", category: "Engagement" },
-    { id: 3, alt: "Engagement photo 3", category: "Engagement" },
-    { id: 4, alt: "Couple photo 1", category: "Couple" },
-    { id: 5, alt: "Couple photo 2", category: "Couple" },
-    { id: 6, alt: "Couple photo 3", category: "Couple" },
-    { id: 7, alt: "Venue photo 1", category: "Venue" },
-    { id: 8, alt: "Venue photo 2", category: "Venue" },
-    { id: 9, alt: "Engagement photo 4", category: "Engagement" },
-    { id: 10, alt: "Couple photo 4", category: "Couple" },
-    { id: 11, alt: "Engagement photo 5", category: "Engagement" },
-    { id: 12, alt: "Venue photo 3", category: "Venue" },
-  ];
+  useEffect(() => {
+    loadPhotos();
+  }, []);
 
-  const [activeCategory, setActiveCategory] = useState("All");
-  const categories = ["All", "Engagement", "Couple", "Venue"];
+  const loadPhotos = async () => {
+    try {
+      const storage = getStorage();
+      const photosRef = ref(storage, "engagementPhotos");
 
-  const filteredImages = activeCategory === "All" 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === activeCategory);
+      const photosList = await listAll(photosRef);
+      const photoUrls = await Promise.all(
+        photosList.items.map(async (item) => {
+          const url = await getDownloadURL(item);
+          return {
+            url,
+            name: item.name,
+            id: item.name,
+          };
+        })
+      );
 
-  const openLightbox = (image) => {
-    setSelectedImage(image);
-    document.body.style.overflow = "hidden";
+      setPhotos(photoUrls);
+    } catch (error) {
+      console.error("Error loading photos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openLightbox = (photo, index) => {
+    setSelectedPhoto(photo);
+    setCurrentIndex(index);
   };
 
   const closeLightbox = () => {
-    setSelectedImage(null);
-    document.body.style.overflow = "auto";
+    setSelectedPhoto(null);
   };
+
+  const nextPhoto = () => {
+    const nextIndex = (currentIndex + 1) % photos.length;
+    setCurrentIndex(nextIndex);
+    setSelectedPhoto(photos[nextIndex]);
+  };
+
+  const prevPhoto = () => {
+    const prevIndex = currentIndex === 0 ? photos.length - 1 : currentIndex - 1;
+    setCurrentIndex(prevIndex);
+    setSelectedPhoto(photos[prevIndex]);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") nextPhoto();
+    if (e.key === "ArrowLeft") prevPhoto();
+  };
+
+  useEffect(() => {
+    if (selectedPhoto) {
+      document.addEventListener("keydown", handleKeyPress);
+      return () => document.removeEventListener("keydown", handleKeyPress);
+    }
+  }, [selectedPhoto, currentIndex]);
 
   return (
     <div className="gallery-page">
-      <motion.section 
+      <motion.section
         className="gallery-hero"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -50,103 +82,117 @@ const Gallery = () => {
       >
         <div className="overlay"></div>
         <div className="gallery-hero-content">
-          <h1>Our Journey Together</h1>
+          <h1>Our Gallery</h1>
           <div className="gallery-hero-divider">
             <div className="divider-line"></div>
             <div className="divider-icon"></div>
             <div className="divider-line"></div>
           </div>
-          <p>A glimpse into our love story and the moments we've shared</p>
+          <p>Capturing the moments that tell our story</p>
         </div>
       </motion.section>
 
       <section className="gallery-intro">
-        <motion.div 
+        <motion.div
           className="intro-content"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <h2>Capturing Our Love</h2>
+          <h2>Our Journey Together</h2>
           <p>
-            From the day we met to our engagement, these photos tell the story of our journey together.
-            Each moment captured is a testament to the love we share and the beautiful future we're building.
+            These photos capture the beautiful moments of our engagement and the
+            love we share. Each image tells a part of our story as we prepare
+            for the next chapter of our lives together.
           </p>
           <div className="flourish"></div>
         </motion.div>
       </section>
 
-      <section className="gallery-filter">
-        <div className="filter-tabs">
-          {categories.map(category => (
-            <button 
-              key={category} 
-              className={`filter-tab ${activeCategory === category ? 'active' : ''}`}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
+      {loading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading our beautiful memories...</p>
         </div>
-      </section>
-
-      <motion.section 
-        className="gallery-grid"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-      >
-        {filteredImages.map((image) => (
-          <motion.div 
-            key={image.id} 
-            className="gallery-item"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ scale: 1.02 }}
-            onClick={() => openLightbox(image)}
-          >
-            <div className={`gallery-image ${!image.src ? "placeholder" : ""}`}>
-              {image.src ? (
-                <img src={image.src} alt={image.alt} />
-              ) : (
-                <div className="image-number">{image.id}</div>
-              )}
-            </div>
-            <div className="image-caption">
-              <p>{image.alt}</p>
-            </div>
-          </motion.div>
-        ))}
-      </motion.section>
-
-      {selectedImage && (
-        <motion.div 
-          className="lightbox"
+      ) : (
+        <motion.section
+          className="gallery-masonry"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={closeLightbox}
+          transition={{ duration: 0.8, delay: 0.8 }}
         >
-          <button className="close-button" onClick={closeLightbox}>×</button>
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <div className={`lightbox-image ${!selectedImage.src ? "placeholder" : ""}`}>
-              {selectedImage.src ? (
-                <img src={selectedImage.src} alt={selectedImage.alt} />
-              ) : (
-                <div className="image-number">{selectedImage.id}</div>
-              )}
-            </div>
-            <div className="lightbox-caption">
-              <p>{selectedImage.alt}</p>
-            </div>
+          <div className="masonry-grid">
+            {photos.map((photo, index) => (
+              <motion.div
+                key={photo.id}
+                className="masonry-item"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                onClick={() => openLightbox(photo, index)}
+              >
+                <div className="photo-container">
+                  <img
+                    src={photo.url}
+                    alt={`Engagement photo ${index + 1}`}
+                    loading="lazy"
+                  />
+                  <div className="photo-overlay">
+                    <div className="photo-overlay-content">
+                      <span className="view-text">View Full Size</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+        </motion.section>
       )}
 
-      <div className="gallery-footer">
-        <p>❖ Our adventure continues ❖</p>
-      </div>
+      {/* Lightbox */}
+      <AnimatePresence>
+        {selectedPhoto && (
+          <motion.div
+            className="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeLightbox}
+          >
+            <button className="close-button" onClick={closeLightbox}>
+              ×
+            </button>
+
+            <button className="nav-button prev-button" onClick={prevPhoto}>
+              ‹
+            </button>
+
+            <motion.div
+              className="lightbox-content"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="lightbox-image">
+                <img src={selectedPhoto.url} alt="Full size view" />
+              </div>
+              <div className="lightbox-info">
+                <p>
+                  {currentIndex + 1} of {photos.length}
+                </p>
+              </div>
+            </motion.div>
+
+            <button className="nav-button next-button" onClick={nextPhoto}>
+              ›
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="closing-flourish"></div>
     </div>
   );
 };
