@@ -11,6 +11,9 @@ import RSVPManagement from "./pages/Admin/RSVPManagement";
 import RSVPViewer from "./pages/Admin/RSVPViewer";
 import "./styles/global.css";
 
+// Import photo preloader to start background loading
+import "./firebase/photoPreloader";
+
 function App() {
   return (
     <Router>
