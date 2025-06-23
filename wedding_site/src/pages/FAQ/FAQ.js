@@ -35,7 +35,7 @@ const FAQ = () => {
       id: 4,
       question: "Where is the wedding located?",
       answer:
-        "Our wedding will be held at 3893 Territorial Rd, Benton Harbor, MI 49022. We can't wait to celebrate with you there! Keep an eye on your invitation and our wedding website for any additional details, including directions and accommodations.",
+        "Our wedding will be held in Benton Harbor, Michigan. We'll exchange vows in their charming outdoor ceremony space, then celebrate with dinner and dancing in the restored authentic 1930s barn with its soaring cathedral ceiling and original beams. The specific address is included in your wedding invitation. For any questions or more information, please contact Christian at 219-789-5996.",
     },
     {
       id: 5,
@@ -53,19 +53,34 @@ const FAQ = () => {
       id: 7,
       question: "What accommodations are available for out-of-town guests?",
       answerComponent: () => (
-        <p>
-          There are no official room blocks set, but there are plenty of hotels
-          in the area such as Courtyard by Marriott, St. Joseph/Benton Harbor.
-          You can find more information and make reservations at{" "}
-          <a
-            href="https://www.marriott.com/en-us/hotels/sbncb-courtyard-st-joseph-benton-harbor/overview/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            their website
-          </a>
-          .
-        </p>
+        <div>
+          <p>
+            We've reserved a block of rooms at the Courtyard by Marriott St.
+            Joseph/Benton Harbor for your convenience. Here are the details:
+          </p>
+          <div style={{ marginLeft: "20px", marginTop: "15px" }}>
+            <p>
+              <strong>Hotel:</strong> Courtyard St. Joseph/Benton Harbor
+            </p>
+            <p>
+              <strong>Address:</strong> 1295 Cinema Way, Benton Harbor, MI 49022
+            </p>
+            <p>
+              <strong>Phone:</strong> (269) 210-3000
+            </p>
+            <p>
+              <strong>Reservation Code:</strong> VLW
+            </p>
+            <p>
+              <strong>Booking Deadline:</strong> September 19th, 2025
+            </p>
+          </div>
+          <p style={{ marginTop: "15px" }}>
+            Please mention the reservation code "VLW" when booking to receive
+            our group rate. Be sure to book by September 19th, 2025 to guarantee
+            availability and pricing.
+          </p>
+        </div>
       ),
     },
     // Additional FAQs will be added here
