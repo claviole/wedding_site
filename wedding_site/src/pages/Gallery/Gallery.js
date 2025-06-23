@@ -145,11 +145,10 @@ const Gallery = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <h2>Our Journey Together</h2>
+          <h2>Our Engagement</h2>
           <p>
             These photos capture the beautiful moments of our engagement and the
-            love we share. Each image tells a part of our story as we prepare
-            for the next chapter of our lives together.
+            love we share.
           </p>
           <div className="flourish"></div>
         </motion.div>
