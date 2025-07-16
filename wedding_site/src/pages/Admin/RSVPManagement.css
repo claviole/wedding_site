@@ -704,6 +704,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .not-attending-card .card-header h4 {
@@ -714,18 +716,35 @@
   font-weight: 600;
 }
 
+.status-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .status-badge.not-attending {
   background: #6c757d;
   color: white;
+}
+
+.status-badge.mixed {
+  background: linear-gradient(135deg, var(--terracotta) 0%, #6c757d 100%);
+  color: white;
+}
+
+.status-badge.partial-not-attending {
+  background: #ffc107;
+  color: #212529;
 }
 
 .not-attending-card .card-body {
@@ -741,6 +760,40 @@
 .rsvp-details strong {
   color: var(--sage);
   font-weight: 600;
+}
+
+/* Guest Breakdown Styles */
+.guest-breakdown {
+  margin: 15px 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.guest-breakdown p {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.guest-list {
+  margin: 8px 0 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.guest-list li {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.guest-list.attending li {
+  color: var(--terracotta);
+}
+
+.guest-list.not-attending li {
+  color: #6c757d;
 }
 
 /* Responsive adjustments for tabs */

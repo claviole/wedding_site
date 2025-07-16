@@ -123,10 +123,18 @@ export const getExistingRSVP = async (guestFileId) => {
 
     if (!querySnapshot.empty) {
       const rsvpDoc = querySnapshot.docs[0];
-      return {
+      const rsvpData = rsvpDoc.data();
+
+      // Migrate old format to new format if needed
+      const migratedData = {
         id: rsvpDoc.id,
-        ...rsvpDoc.data(),
+        ...rsvpData,
+        // Ensure arrays exist for new format
+        attendingGuests: rsvpData.attendingGuests || [],
+        notAttendingGuests: rsvpData.notAttendingGuests || [],
       };
+
+      return migratedData;
     }
 
     return null;
@@ -136,29 +144,41 @@ export const getExistingRSVP = async (guestFileId) => {
   }
 };
 
-// RSVP Functions - Updated to handle partial RSVPs
+// RSVP Functions - Updated to handle partial RSVPs and mixed responses
 export const submitRSVP = async (rsvpData) => {
   try {
     // Check if an RSVP already exists for this guest file
     const existingRSVP = await getExistingRSVP(rsvpData.guestFileId);
 
     if (existingRSVP) {
-      // Update existing RSVP by merging the attending guests
+      // Update existing RSVP by merging the attending and not attending guests
+      const existingAttending = existingRSVP.attendingGuests || [];
+      const existingNotAttending = existingRSVP.notAttendingGuests || [];
+
+      const newAttending = rsvpData.attendingGuests || [];
+      const newNotAttending = rsvpData.notAttendingGuests || [];
+
+      // Merge and deduplicate guest lists
       const mergedAttendingGuests = [
-        ...new Set([
-          ...existingRSVP.attendingGuests,
-          ...rsvpData.attendingGuests,
-        ]),
+        ...new Set([...existingAttending, ...newAttending]),
+      ];
+
+      const mergedNotAttendingGuests = [
+        ...new Set([...existingNotAttending, ...newNotAttending]),
       ];
 
       const updatedRSVPData = {
         ...existingRSVP,
         attendingGuests: mergedAttendingGuests,
+        notAttendingGuests: mergedNotAttendingGuests,
         totalAttending: mergedAttendingGuests.length,
+        totalNotAttending: mergedNotAttendingGuests.length,
         lastUpdatedAt: new Date().toISOString(),
         // Update contact info if provided
         ...(rsvpData.contactEmail && { contactEmail: rsvpData.contactEmail }),
         ...(rsvpData.contactPhone && { contactPhone: rsvpData.contactPhone }),
+        // Remove old notAttending boolean if it exists (for migration)
+        notAttending: undefined,
       };
 
       const docRef = doc(db, RSVPS_COLLECTION, existingRSVP.id);
@@ -166,7 +186,19 @@ export const submitRSVP = async (rsvpData) => {
       return existingRSVP.id;
     } else {
       // Create new RSVP
-      const docRef = await addDoc(collection(db, RSVPS_COLLECTION), rsvpData);
+      const newRSVPData = {
+        ...rsvpData,
+        // Ensure arrays exist
+        attendingGuests: rsvpData.attendingGuests || [],
+        notAttendingGuests: rsvpData.notAttendingGuests || [],
+        totalAttending: (rsvpData.attendingGuests || []).length,
+        totalNotAttending: (rsvpData.notAttendingGuests || []).length,
+      };
+
+      const docRef = await addDoc(
+        collection(db, RSVPS_COLLECTION),
+        newRSVPData
+      );
       return docRef.id;
     }
   } catch (error) {

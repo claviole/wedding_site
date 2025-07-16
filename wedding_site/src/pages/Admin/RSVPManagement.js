@@ -58,7 +58,17 @@ const RSVPManagement = () => {
   };
 
   const filterNotAttendingRSVPs = () => {
-    let filtered = rsvps.filter((rsvp) => rsvp.notAttending === true);
+    // Filter RSVPs that have any guests not attending (either old format or new format)
+    let filtered = rsvps.filter((rsvp) => {
+      // Old format: notAttending: true
+      if (rsvp.notAttending === true) return true;
+
+      // New format: notAttendingGuests array with content
+      if (rsvp.notAttendingGuests && rsvp.notAttendingGuests.length > 0)
+        return true;
+
+      return false;
+    });
 
     if (searchTerm) {
       filtered = filtered.filter((rsvp) =>
@@ -258,9 +268,16 @@ const RSVPManagement = () => {
     );
   }
 
-  const notAttendingCount = rsvps.filter(
-    (rsvp) => rsvp.notAttending === true
-  ).length;
+  const notAttendingCount = rsvps.filter((rsvp) => {
+    // Old format: notAttending: true
+    if (rsvp.notAttending === true) return true;
+
+    // New format: notAttendingGuests array with content
+    if (rsvp.notAttendingGuests && rsvp.notAttendingGuests.length > 0)
+      return true;
+
+    return false;
+  }).length;
 
   return (
     <div className="rsvp-management-page">
@@ -552,36 +569,102 @@ const RSVPManagement = () => {
             </div>
           ) : (
             <div className="not-attending-grid">
-              {filteredRSVPs.map((rsvp) => (
-                <div key={rsvp.id} className="not-attending-card">
-                  <div className="card-header">
-                    <h4>{rsvp.primaryGuestName}</h4>
-                    <div className="status-badge not-attending">
-                      Not Attending
-                    </div>
-                  </div>
+              {filteredRSVPs.map((rsvp) => {
+                // Determine if this is old format (all not attending) or new format (mixed)
+                const isFullyNotAttending = rsvp.notAttending === true;
+                const attendingGuests = rsvp.attendingGuests || [];
+                const notAttendingGuests = rsvp.notAttendingGuests || [];
+                const isMixedResponse =
+                  attendingGuests.length > 0 && notAttendingGuests.length > 0;
 
-                  <div className="card-body">
-                    <div className="rsvp-details">
-                      <p>
-                        <strong>Submitted:</strong>{" "}
-                        {formatDate(rsvp.submittedAt)}
-                      </p>
-                      <p>
-                        <strong>Contact Email:</strong> {rsvp.contactEmail}
-                      </p>
-                      {rsvp.contactPhone && (
+                return (
+                  <div key={rsvp.id} className="not-attending-card">
+                    <div className="card-header">
+                      <h4>{rsvp.primaryGuestName}</h4>
+                      <div className="status-badges">
+                        {isFullyNotAttending && (
+                          <div className="status-badge not-attending">
+                            All Not Attending
+                          </div>
+                        )}
+                        {isMixedResponse && (
+                          <div className="status-badge mixed">
+                            Mixed Response
+                          </div>
+                        )}
+                        {!isFullyNotAttending &&
+                          !isMixedResponse &&
+                          notAttendingGuests.length > 0 && (
+                            <div className="status-badge partial-not-attending">
+                              Partial Not Attending
+                            </div>
+                          )}
+                      </div>
+                    </div>
+
+                    <div className="card-body">
+                      <div className="rsvp-details">
                         <p>
-                          <strong>Phone:</strong> {rsvp.contactPhone}
+                          <strong>Submitted:</strong>{" "}
+                          {formatDate(rsvp.submittedAt)}
                         </p>
-                      )}
-                      <p>
-                        <strong>Max Guests:</strong> {rsvp.maxGuestsAllowed}
-                      </p>
+                        <p>
+                          <strong>Contact Email:</strong> {rsvp.contactEmail}
+                        </p>
+                        {rsvp.contactPhone && (
+                          <p>
+                            <strong>Phone:</strong> {rsvp.contactPhone}
+                          </p>
+                        )}
+                        <p>
+                          <strong>Max Guests:</strong> {rsvp.maxGuestsAllowed}
+                        </p>
+
+                        {/* Show attending guests if any */}
+                        {attendingGuests.length > 0 && (
+                          <div className="guest-breakdown">
+                            <p>
+                              <strong>
+                                Attending ({attendingGuests.length}):
+                              </strong>
+                            </p>
+                            <ul className="guest-list attending">
+                              {attendingGuests.map((guest, index) => (
+                                <li key={index}>✓ {guest}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Show not attending guests */}
+                        {notAttendingGuests.length > 0 && (
+                          <div className="guest-breakdown">
+                            <p>
+                              <strong>
+                                Not Attending ({notAttendingGuests.length}):
+                              </strong>
+                            </p>
+                            <ul className="guest-list not-attending">
+                              {notAttendingGuests.map((guest, index) => (
+                                <li key={index}>✗ {guest}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Legacy full "not attending" display */}
+                        {isFullyNotAttending && (
+                          <div className="guest-breakdown">
+                            <p>
+                              <strong>Status:</strong> All guests declined
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
