@@ -5,17 +5,22 @@ import {
   getGuestFiles,
   deleteGuestFile,
   updateGuestFile,
+  getRSVPs,
 } from "../../firebase/guestService";
 import "./RSVPManagement.css";
 
 const RSVPManagement = () => {
   const [guestFiles, setGuestFiles] = useState([]);
   const [filteredGuestFiles, setFilteredGuestFiles] = useState([]);
+  const [rsvps, setRSVPs] = useState([]);
+  const [filteredRSVPs, setFilteredRSVPs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingFile, setEditingFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showNotAttending, setShowNotAttending] = useState(false);
+  const [activeTab, setActiveTab] = useState("guestFiles"); // 'guestFiles' or 'notAttending'
   const [newGuestFile, setNewGuestFile] = useState({
     primaryName: "",
     additionalGuests: [""],
@@ -24,12 +29,48 @@ const RSVPManagement = () => {
   });
 
   useEffect(() => {
-    loadGuestFiles();
+    loadData();
   }, []);
 
   useEffect(() => {
     filterAndSortGuests();
   }, [guestFiles, searchTerm]);
+
+  useEffect(() => {
+    filterNotAttendingRSVPs();
+  }, [rsvps, searchTerm]);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [guestFilesData, rsvpsData] = await Promise.all([
+        getGuestFiles(),
+        getRSVPs(),
+      ]);
+      setGuestFiles(guestFilesData);
+      setRSVPs(rsvpsData);
+    } catch (error) {
+      console.error("Error loading data:", error);
+      alert("Error loading data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterNotAttendingRSVPs = () => {
+    let filtered = rsvps.filter((rsvp) => rsvp.notAttending === true);
+
+    if (searchTerm) {
+      filtered = filtered.filter((rsvp) =>
+        rsvp.primaryGuestName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Sort by submission date (most recent first)
+    filtered.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+    setFilteredRSVPs(filtered);
+  };
 
   const formatName = (name) => {
     return name
@@ -187,6 +228,8 @@ const RSVPManagement = () => {
         year: "numeric",
         month: "short",
         day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
     } catch (error) {
       return "Unknown date";
@@ -209,11 +252,15 @@ const RSVPManagement = () => {
       <div className="rsvp-management-page">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading guest files...</p>
+          <p>Loading data...</p>
         </div>
       </div>
     );
   }
+
+  const notAttendingCount = rsvps.filter(
+    (rsvp) => rsvp.notAttending === true
+  ).length;
 
   return (
     <div className="rsvp-management-page">
@@ -221,7 +268,9 @@ const RSVPManagement = () => {
         <div className="header-content">
           <div className="title-section">
             <h1 className="page-title">RSVP Management</h1>
-            <p className="page-subtitle">Manage guest files and invitations</p>
+            <p className="page-subtitle">
+              Manage guest files and view responses
+            </p>
           </div>
           <div className="header-actions">
             <Link to="/" className="back-home-btn">
@@ -235,6 +284,22 @@ const RSVPManagement = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="tab-navigation">
+        <button
+          className={`tab-btn ${activeTab === "guestFiles" ? "active" : ""}`}
+          onClick={() => setActiveTab("guestFiles")}
+        >
+          Guest Files ({filteredGuestFiles.length})
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "notAttending" ? "active" : ""}`}
+          onClick={() => setActiveTab("notAttending")}
+        >
+          Not Attending ({notAttendingCount})
+        </button>
       </div>
 
       {showAddForm && (
@@ -357,97 +422,170 @@ const RSVPManagement = () => {
         </div>
       )}
 
-      <div className="guest-files-section">
-        <div className="section-header">
-          <div className="section-title-info">
-            <h2>Guest Files ({filteredGuestFiles.length})</h2>
-            <span className="total-guests-count">
-              Total Guests: {getTotalGuestCount(filteredGuestFiles)}
-            </span>
+      {activeTab === "guestFiles" && (
+        <div className="guest-files-section">
+          <div className="section-header">
+            <div className="section-title-info">
+              <h2>Guest Files ({filteredGuestFiles.length})</h2>
+              <span className="total-guests-count">
+                Total Guests: {getTotalGuestCount(filteredGuestFiles)}
+              </span>
+            </div>
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search guests..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
           </div>
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search guests..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-          </div>
+
+          {filteredGuestFiles.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">📋</div>
+              <h3>{searchTerm ? "No guests found" : "No guest files yet"}</h3>
+              <p>
+                {searchTerm
+                  ? "Try adjusting your search terms."
+                  : "Create your first guest file to get started with RSVP management."}
+              </p>
+              {!searchTerm && (
+                <button
+                  onClick={() => setShowAddForm(true)}
+                  className="empty-action-btn"
+                >
+                  Add First Guest File
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="guest-files-grid">
+              {filteredGuestFiles.map((file) => (
+                <div key={file.id} className="guest-card">
+                  <div className="card-header">
+                    <h4>{file.primaryName}</h4>
+                    <div className="card-actions">
+                      <button
+                        onClick={() => handleEditGuestFile(file)}
+                        className="edit-btn"
+                        title="Edit guest file"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        onClick={() => handleDeleteGuestFile(file.id)}
+                        className="delete-btn"
+                        title="Delete guest file"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="card-body">
+                    {file.additionalGuests.length > 0 && (
+                      <div className="additional-guests">
+                        <strong>Additional Guests:</strong>
+                        <ul>
+                          {file.additionalGuests.map((guest, index) => (
+                            <li key={index}>{guest}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className="guest-info">
+                      <span className="max-guests-badge">
+                        Max: {file.maxGuests} guest
+                        {file.maxGuests !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+
+                    {file.notes && (
+                      <div className="notes">
+                        <strong>Notes:</strong> {file.notes}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+      )}
 
-        {filteredGuestFiles.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">📋</div>
-            <h3>{searchTerm ? "No guests found" : "No guest files yet"}</h3>
-            <p>
-              {searchTerm
-                ? "Try adjusting your search terms."
-                : "Create your first guest file to get started with RSVP management."}
-            </p>
-            {!searchTerm && (
-              <button
-                onClick={() => setShowAddForm(true)}
-                className="empty-action-btn"
-              >
-                Add First Guest File
-              </button>
-            )}
+      {activeTab === "notAttending" && (
+        <div className="not-attending-section">
+          <div className="section-header">
+            <div className="section-title-info">
+              <h2>Not Attending Responses ({notAttendingCount})</h2>
+              <span className="section-subtitle">
+                Guests who have declined the invitation
+              </span>
+            </div>
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search not attending guests..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
           </div>
-        ) : (
-          <div className="guest-files-grid">
-            {filteredGuestFiles.map((file) => (
-              <div key={file.id} className="guest-card">
-                <div className="card-header">
-                  <h4>{file.primaryName}</h4>
-                  <div className="card-actions">
-                    <button
-                      onClick={() => handleEditGuestFile(file)}
-                      className="edit-btn"
-                      title="Edit guest file"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      onClick={() => handleDeleteGuestFile(file.id)}
-                      className="delete-btn"
-                      title="Delete guest file"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
 
-                <div className="card-body">
-                  {file.additionalGuests.length > 0 && (
-                    <div className="additional-guests">
-                      <strong>Additional Guests:</strong>
-                      <ul>
-                        {file.additionalGuests.map((guest, index) => (
-                          <li key={index}>{guest}</li>
-                        ))}
-                      </ul>
+          {filteredRSVPs.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">😔</div>
+              <h3>
+                {searchTerm
+                  ? "No matching responses found"
+                  : "No 'Not Attending' responses yet"}
+              </h3>
+              <p>
+                {searchTerm
+                  ? "Try adjusting your search terms."
+                  : "When guests decline the invitation, they will appear here."}
+              </p>
+            </div>
+          ) : (
+            <div className="not-attending-grid">
+              {filteredRSVPs.map((rsvp) => (
+                <div key={rsvp.id} className="not-attending-card">
+                  <div className="card-header">
+                    <h4>{rsvp.primaryGuestName}</h4>
+                    <div className="status-badge not-attending">
+                      Not Attending
                     </div>
-                  )}
-
-                  <div className="guest-info">
-                    <span className="max-guests-badge">
-                      Max: {file.maxGuests} guest
-                      {file.maxGuests !== 1 ? "s" : ""}
-                    </span>
                   </div>
 
-                  {file.notes && (
-                    <div className="notes">
-                      <strong>Notes:</strong> {file.notes}
+                  <div className="card-body">
+                    <div className="rsvp-details">
+                      <p>
+                        <strong>Submitted:</strong>{" "}
+                        {formatDate(rsvp.submittedAt)}
+                      </p>
+                      <p>
+                        <strong>Contact Email:</strong> {rsvp.contactEmail}
+                      </p>
+                      {rsvp.contactPhone && (
+                        <p>
+                          <strong>Phone:</strong> {rsvp.contactPhone}
+                        </p>
+                      )}
+                      <p>
+                        <strong>Max Guests:</strong> {rsvp.maxGuestsAllowed}
+                      </p>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

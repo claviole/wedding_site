@@ -18,6 +18,7 @@ const RSVP = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [isUpdatingExisting, setIsUpdatingExisting] = useState(false);
+  const [isNotAttending, setIsNotAttending] = useState(false);
 
   // Search for guests as user types
   useEffect(() => {
@@ -100,9 +101,49 @@ const RSVP = () => {
     );
   };
 
+  const handleNotAttending = async () => {
+    if (!contactInfo.email.trim()) {
+      // For not attending, we still want contact info, so let's go to step 3
+      setIsNotAttending(true);
+      setStep(3);
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const rsvpData = {
+        guestFileId: selectedGuestFile.id,
+        primaryGuestName: selectedGuestFile.primaryName,
+        attendingGuests: [],
+        totalAttending: 0,
+        notAttending: true,
+        contactEmail: contactInfo.email.trim(),
+        contactPhone: contactInfo.phone.trim(),
+        submittedAt: new Date().toISOString(),
+        maxGuestsAllowed: selectedGuestFile.maxGuests,
+      };
+
+      await submitRSVP(rsvpData);
+      setIsSubmitted(true);
+      setStep(4);
+    } catch (error) {
+      console.error("Error submitting RSVP:", error);
+      alert("There was an error submitting your RSVP. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleContactSubmit = async () => {
     if (!contactInfo.email.trim()) {
       alert("Please provide an email address for wedding updates.");
+      return;
+    }
+
+    if (isNotAttending) {
+      // Handle not attending submission
+      await handleNotAttending();
       return;
     }
 
@@ -124,6 +165,7 @@ const RSVP = () => {
         primaryGuestName: selectedGuestFile.primaryName,
         attendingGuests: newlySelectedGuests.map((guest) => guest.name),
         totalAttending: newlySelectedGuests.length,
+        notAttending: false,
         contactEmail: contactInfo.email.trim(),
         contactPhone: contactInfo.phone.trim(),
         submittedAt: new Date().toISOString(),
@@ -149,6 +191,7 @@ const RSVP = () => {
     setContactInfo({ email: "", phone: "" });
     setIsSubmitted(false);
     setIsUpdatingExisting(false);
+    setIsNotAttending(false);
   };
 
   const returnToHome = () => {
@@ -156,6 +199,39 @@ const RSVP = () => {
   };
 
   if (isSubmitted) {
+    if (isNotAttending) {
+      return (
+        <div className="rsvp-container">
+          <div className="rsvp-content">
+            <div className="confirmation-section">
+              <div className="confirmation-icon">💙</div>
+              <h1>Thank You!</h1>
+              <p className="confirmation-message">
+                We're sorry you can't make it, but we appreciate you letting us
+                know. We'll miss celebrating with you!
+              </p>
+              <div className="confirmation-details">
+                <h3>RSVP Summary:</h3>
+                <p>
+                  <strong>Primary Guest:</strong>{" "}
+                  {selectedGuestFile?.primaryName}
+                </p>
+                <p>
+                  <strong>Status:</strong> Not Attending
+                </p>
+                <p>
+                  <strong>Contact Email:</strong> {contactInfo.email}
+                </p>
+              </div>
+              <button onClick={returnToHome} className="return-home-btn">
+                Return to Home
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     const newlyRSVPdGuests = attendingGuests.filter(
       (guest) => guest.attending && !guest.alreadyRSVPd
     );
@@ -315,6 +391,27 @@ const RSVP = () => {
               </div>
             </div>
 
+            {!isUpdatingExisting && (
+              <div className="not-attending-section">
+                <div className="divider">
+                  <span>or</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsNotAttending(true);
+                    setStep(3);
+                  }}
+                  className="not-attending-btn"
+                >
+                  😔 We can't make it
+                </button>
+                <p className="not-attending-note">
+                  We'll be sad to miss you, but we understand if you can't
+                  attend.
+                </p>
+              </div>
+            )}
+
             <div className="step-actions">
               <button onClick={() => setStep(1)} className="back-btn">
                 ← Back
@@ -337,7 +434,11 @@ const RSVP = () => {
         {step === 3 && (
           <div className="step-section">
             <h2>Contact Information</h2>
-            <p>Please provide your contact information for wedding updates:</p>
+            <p>
+              {isNotAttending
+                ? "Please provide your contact information so we can stay in touch:"
+                : "Please provide your contact information for wedding updates:"}
+            </p>
 
             <div className="contact-form">
               <div className="form-group">
@@ -370,52 +471,91 @@ const RSVP = () => {
               </div>
             </div>
 
-            <div className="rsvp-summary">
-              <h3>RSVP Summary</h3>
-              <div className="summary-details">
-                {isUpdatingExisting && (
-                  <>
-                    <p>
-                      <strong>Already RSVP'd:</strong>
-                    </p>
-                    <ul>
-                      {attendingGuests
-                        .filter((guest) => guest.alreadyRSVPd)
-                        .map((guest, index) => (
-                          <li key={index} className="already-rsvpd-guest">
-                            {guest.name} ✓
-                          </li>
-                        ))}
-                    </ul>
-                  </>
-                )}
-                <p>
-                  <strong>
-                    {isUpdatingExisting ? "Adding" : "Attending"} Guests:
-                  </strong>
-                </p>
-                <ul>
-                  {attendingGuests
-                    .filter((guest) => guest.attending && !guest.alreadyRSVPd)
-                    .map((guest, index) => (
-                      <li key={index}>{guest.name}</li>
-                    ))}
-                </ul>
-                <p>
-                  <strong>
-                    Total {isUpdatingExisting ? "New" : ""} Attending:
-                  </strong>{" "}
-                  {
-                    attendingGuests.filter(
-                      (guest) => guest.attending && !guest.alreadyRSVPd
-                    ).length
-                  }
-                </p>
+            {!isNotAttending && (
+              <div className="rsvp-summary">
+                <h3>RSVP Summary</h3>
+                <div className="summary-details">
+                  {isUpdatingExisting && (
+                    <>
+                      <p>
+                        <strong>Already RSVP'd:</strong>
+                      </p>
+                      <ul>
+                        {attendingGuests
+                          .filter((guest) => guest.alreadyRSVPd)
+                          .map((guest, index) => (
+                            <li key={index} className="already-rsvpd-guest">
+                              {guest.name} ✓
+                            </li>
+                          ))}
+                      </ul>
+                    </>
+                  )}
+                  <p>
+                    <strong>
+                      {isUpdatingExisting ? "Adding" : "Attending"} Guests:
+                    </strong>
+                  </p>
+                  <ul>
+                    {attendingGuests
+                      .filter((guest) => guest.attending && !guest.alreadyRSVPd)
+                      .map((guest, index) => (
+                        <li key={index}>{guest.name}</li>
+                      ))}
+                  </ul>
+                  <p>
+                    <strong>
+                      Total {isUpdatingExisting ? "New" : ""} Attending:
+                    </strong>{" "}
+                    {
+                      attendingGuests.filter(
+                        (guest) => guest.attending && !guest.alreadyRSVPd
+                      ).length
+                    }
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
+
+            {isNotAttending && (
+              <div className="not-attending-summary">
+                <h3>RSVP Summary</h3>
+                <div className="summary-details">
+                  <p>
+                    <strong>Status:</strong> Not Attending
+                  </p>
+                  <p>
+                    <strong>Primary Guest:</strong>{" "}
+                    {selectedGuestFile?.primaryName}
+                  </p>
+                  {selectedGuestFile?.additionalGuests?.length > 0 && (
+                    <>
+                      <p>
+                        <strong>Additional Invited Guests:</strong>
+                      </p>
+                      <ul>
+                        {selectedGuestFile.additionalGuests.map(
+                          (guest, index) => (
+                            <li key={index}>{guest}</li>
+                          )
+                        )}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className="step-actions">
-              <button onClick={() => setStep(2)} className="back-btn">
+              <button
+                onClick={() => {
+                  if (isNotAttending) {
+                    setIsNotAttending(false);
+                  }
+                  setStep(2);
+                }}
+                className="back-btn"
+              >
                 ← Back
               </button>
               <button
@@ -425,9 +565,11 @@ const RSVP = () => {
               >
                 {isSubmitting
                   ? "Submitting..."
-                  : isUpdatingExisting
-                    ? "Update RSVP"
-                    : "Submit RSVP"}
+                  : isNotAttending
+                    ? "Submit RSVP"
+                    : isUpdatingExisting
+                      ? "Update RSVP"
+                      : "Submit RSVP"}
               </button>
             </div>
           </div>
