@@ -16,6 +16,13 @@
   "hosting": {
     "public": "build",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      {
+        "source": "https://www.christiananddimitra.com/**",
+        "destination": "https://christiananddimitra.com/**",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
