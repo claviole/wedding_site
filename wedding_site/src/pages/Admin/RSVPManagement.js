@@ -115,7 +115,11 @@ const RSVPManagement = () => {
   const getTotalGuestCount = (files) => {
     return files.reduce((total, file) => {
       // Count primary guest (1) + additional guests
-      return total + 1 + file.additionalGuests.length;
+      // Handle cases where additionalGuests might be undefined
+      const additionalGuestsCount = file.additionalGuests
+        ? file.additionalGuests.length
+        : 0;
+      return total + 1 + additionalGuestsCount;
     }, 0);
   };
 
