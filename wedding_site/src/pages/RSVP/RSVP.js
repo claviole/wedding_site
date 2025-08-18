@@ -168,12 +168,31 @@ const RSVP = () => {
         maxGuestsAllowed: selectedGuestFile.maxGuests,
       };
 
+      console.log("Submitting RSVP data from component:", rsvpData);
+
       await submitRSVP(rsvpData);
       setIsSubmitted(true);
       setStep(4);
     } catch (error) {
       console.error("Error submitting RSVP:", error);
-      alert("There was an error submitting your RSVP. Please try again.");
+      console.error("Error message:", error.message);
+      console.error("Error code:", error.code);
+
+      let errorMessage =
+        "There was an error submitting your RSVP. Please try again.";
+
+      // Provide more specific error messages
+      if (error.code === "permission-denied") {
+        errorMessage =
+          "Permission denied. Please check your internet connection and try again.";
+      } else if (error.code === "unavailable") {
+        errorMessage =
+          "Service temporarily unavailable. Please try again in a moment.";
+      } else if (error.message) {
+        errorMessage = `Error: ${error.message}`;
+      }
+
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

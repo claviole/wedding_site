@@ -115,6 +115,8 @@ export const findGuestFileByName = async (searchName) => {
 // Get existing RSVP for a guest file
 export const getExistingRSVP = async (guestFileId) => {
   try {
+    console.log("Getting existing RSVP for guestFileId:", guestFileId);
+
     const q = query(
       collection(db, RSVPS_COLLECTION),
       where("guestFileId", "==", guestFileId)
@@ -125,30 +127,65 @@ export const getExistingRSVP = async (guestFileId) => {
       const rsvpDoc = querySnapshot.docs[0];
       const rsvpData = rsvpDoc.data();
 
+      console.log("Raw RSVP data from Firestore:", rsvpData);
+
       // Migrate old format to new format if needed
       const migratedData = {
         id: rsvpDoc.id,
         ...rsvpData,
         // Ensure arrays exist for new format
-        attendingGuests: rsvpData.attendingGuests || [],
-        notAttendingGuests: rsvpData.notAttendingGuests || [],
+        attendingGuests: Array.isArray(rsvpData.attendingGuests)
+          ? rsvpData.attendingGuests
+          : [],
+        notAttendingGuests: Array.isArray(rsvpData.notAttendingGuests)
+          ? rsvpData.notAttendingGuests
+          : [],
       };
 
+      console.log("Migrated RSVP data:", migratedData);
       return migratedData;
     }
 
+    console.log("No existing RSVP found");
     return null;
   } catch (error) {
     console.error("Error getting existing RSVP:", error);
+    console.error("Error details:", error.message, error.code);
     throw error;
   }
+};
+
+// Helper function to validate RSVP data structure
+const validateRSVPData = (rsvpData) => {
+  const requiredFields = ["guestFileId", "primaryGuestName", "contactEmail"];
+  const missingFields = requiredFields.filter((field) => !rsvpData[field]);
+
+  if (missingFields.length > 0) {
+    throw new Error(`Missing required fields: ${missingFields.join(", ")}`);
+  }
+
+  if (!Array.isArray(rsvpData.attendingGuests)) {
+    throw new Error("attendingGuests must be an array");
+  }
+
+  if (!Array.isArray(rsvpData.notAttendingGuests)) {
+    throw new Error("notAttendingGuests must be an array");
+  }
+
+  return true;
 };
 
 // RSVP Functions - Updated to handle partial RSVPs and mixed responses
 export const submitRSVP = async (rsvpData) => {
   try {
+    console.log("Submitting RSVP with data:", rsvpData);
+
+    // Validate the data structure
+    validateRSVPData(rsvpData);
+
     // Check if an RSVP already exists for this guest file
     const existingRSVP = await getExistingRSVP(rsvpData.guestFileId);
+    console.log("Existing RSVP found:", existingRSVP);
 
     if (existingRSVP) {
       // Update existing RSVP by merging the attending and not attending guests
@@ -157,6 +194,13 @@ export const submitRSVP = async (rsvpData) => {
 
       const newAttending = rsvpData.attendingGuests || [];
       const newNotAttending = rsvpData.notAttendingGuests || [];
+
+      console.log("Merging guests:", {
+        existingAttending,
+        existingNotAttending,
+        newAttending,
+        newNotAttending,
+      });
 
       // Merge and deduplicate guest lists
       const mergedAttendingGuests = [
@@ -167,22 +211,28 @@ export const submitRSVP = async (rsvpData) => {
         ...new Set([...existingNotAttending, ...newNotAttending]),
       ];
 
+      // Clean up the data - remove undefined values and ensure proper structure
       const updatedRSVPData = {
-        ...existingRSVP,
+        guestFileId: rsvpData.guestFileId,
+        primaryGuestName: rsvpData.primaryGuestName,
         attendingGuests: mergedAttendingGuests,
         notAttendingGuests: mergedNotAttendingGuests,
         totalAttending: mergedAttendingGuests.length,
         totalNotAttending: mergedNotAttendingGuests.length,
+        contactEmail: rsvpData.contactEmail || existingRSVP.contactEmail,
+        contactPhone: rsvpData.contactPhone || existingRSVP.contactPhone || "",
+        submittedAt: existingRSVP.submittedAt, // Keep original submission date
         lastUpdatedAt: new Date().toISOString(),
-        // Update contact info if provided
-        ...(rsvpData.contactEmail && { contactEmail: rsvpData.contactEmail }),
-        ...(rsvpData.contactPhone && { contactPhone: rsvpData.contactPhone }),
-        // Remove old notAttending boolean if it exists (for migration)
-        notAttending: undefined,
+        maxGuestsAllowed:
+          rsvpData.maxGuestsAllowed || existingRSVP.maxGuestsAllowed,
       };
+
+      console.log("Updating RSVP with data:", updatedRSVPData);
 
       const docRef = doc(db, RSVPS_COLLECTION, existingRSVP.id);
       await updateDoc(docRef, updatedRSVPData);
+
+      console.log("RSVP updated successfully");
       return existingRSVP.id;
     } else {
       // Create new RSVP
@@ -193,16 +243,22 @@ export const submitRSVP = async (rsvpData) => {
         notAttendingGuests: rsvpData.notAttendingGuests || [],
         totalAttending: (rsvpData.attendingGuests || []).length,
         totalNotAttending: (rsvpData.notAttendingGuests || []).length,
+        contactPhone: rsvpData.contactPhone || "",
       };
+
+      console.log("Creating new RSVP with data:", newRSVPData);
 
       const docRef = await addDoc(
         collection(db, RSVPS_COLLECTION),
         newRSVPData
       );
+
+      console.log("New RSVP created successfully");
       return docRef.id;
     }
   } catch (error) {
     console.error("Error submitting RSVP:", error);
+    console.error("Error details:", error.message, error.code);
     throw error;
   }
 };
