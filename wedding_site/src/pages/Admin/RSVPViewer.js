@@ -39,11 +39,12 @@ const RSVPViewer = () => {
   };
 
   const filterAndSortRSVPs = () => {
-    let filtered = rsvps;
+    // First filter to only show RSVPs with attending guests
+    let filtered = rsvps.filter((rsvp) => (rsvp.totalAttending || 0) > 0);
 
     // Apply search filter
     if (searchTerm) {
-      filtered = rsvps.filter((rsvp) => {
+      filtered = filtered.filter((rsvp) => {
         const primaryMatch = rsvp.primaryGuestName
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
@@ -294,10 +295,16 @@ const RSVPViewer = () => {
     );
   }
 
-  // Calculate no-reply stats for display
+  // Calculate stats for display
   const respondedGuestFileIds = new Set(rsvps.map((rsvp) => rsvp.guestFileId));
   const noRepliesCount = guestFiles.filter(
     (guestFile) => !respondedGuestFileIds.has(guestFile.id)
+  ).length;
+
+  // Count total RSVPs vs attending RSVPs
+  const totalRSVPs = rsvps.length;
+  const attendingRSVPs = rsvps.filter(
+    (rsvp) => (rsvp.totalAttending || 0) > 0
   ).length;
 
   return (
@@ -313,11 +320,15 @@ const RSVPViewer = () => {
         <div className="rsvp-stats">
           <div className="stat-card">
             <div className="stat-number">{filteredRsvps.length}</div>
-            <div className="stat-label">Total RSVPs</div>
+            <div className="stat-label">Attending RSVPs</div>
           </div>
           <div className="stat-card">
             <div className="stat-number">{getTotalAttendingCount()}</div>
             <div className="stat-label">Guests Attending</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-number">{totalRSVPs - attendingRSVPs}</div>
+            <div className="stat-label">Not Attending</div>
           </div>
           <div className="stat-card">
             <div className="stat-number">{noRepliesCount}</div>
@@ -377,8 +388,10 @@ const RSVPViewer = () => {
         {filteredRsvps.length === 0 ? (
           <div className="no-rsvps">
             {searchTerm
-              ? "No RSVPs match your search."
-              : "No RSVPs submitted yet."}
+              ? "No attending RSVPs match your search."
+              : attendingRSVPs === 0
+                ? "No attending RSVPs yet."
+                : "No attending RSVPs to display."}
           </div>
         ) : (
           filteredRsvps.map((rsvp) => (
