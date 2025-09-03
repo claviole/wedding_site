@@ -129,6 +129,12 @@
   background: #8fb085;
 }
 
+.export-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .export-btn {
   background: var(--terracotta);
   color: white;
@@ -144,6 +150,15 @@
 .export-btn:hover {
   background: var(--terracotta-dark);
   transform: translateY(-2px);
+}
+
+.export-btn.no-replies {
+  background: #ffc107;
+  color: #212529;
+}
+
+.export-btn.no-replies:hover {
+  background: #e0a800;
 }
 
 .rsvp-list {
@@ -239,6 +254,11 @@
   border-radius: 12px;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.no-attending {
+  color: #6c757d;
+  font-style: italic;
 }
 
 .contact-info {
