@@ -5,6 +5,12 @@ import "./RSVP.css";
 
 const RSVP = () => {
   const navigate = useNavigate();
+
+  // Check if RSVP deadline has passed (September 7th, 2025)
+  const rsvpDeadline = new Date("2025-09-07T23:59:59");
+  const currentDate = new Date();
+  const isRSVPClosed = currentDate > rsvpDeadline;
+
   const [step, setStep] = useState(1); // 1: name input, 2: guest selection, 3: contact info, 4: confirmation
   const [nameInput, setNameInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -211,6 +217,45 @@ const RSVP = () => {
   const returnToHome = () => {
     navigate("/");
   };
+
+  // Show RSVP closed message if deadline has passed
+  if (isRSVPClosed) {
+    return (
+      <div className="rsvp-container">
+        <div className="rsvp-content">
+          <div className="rsvp-closed-section">
+            <div className="rsvp-closed-icon">💌</div>
+            <h1>RSVP Period Has Ended</h1>
+            <p className="rsvp-closed-message">
+              We sincerely appreciate your interest in celebrating with us!
+              However, our RSVP deadline of <strong>September 7th, 2025</strong>{" "}
+              has now passed, and we are no longer able to accept new responses
+              as we finalize our wedding preparations.
+            </p>
+            <div className="contact-info-box">
+              <p className="contact-message">
+                If you have any questions, concerns, or special circumstances,
+                please don't hesitate to reach out to Christian directly:
+              </p>
+              <div className="phone-contact">
+                <span className="phone-icon">📱</span>
+                <a href="tel:219-789-5996" className="phone-number">
+                  (219) 789-5996
+                </a>
+              </div>
+            </div>
+            <p className="thank-you-message">
+              Thank you for your understanding, and we hope to see you at our
+              special day!
+            </p>
+            <button onClick={returnToHome} className="return-home-btn">
+              Return to Home
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isSubmitted) {
     const newlyAttendingGuests = attendingGuests.filter(

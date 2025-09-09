@@ -473,6 +473,89 @@
   box-shadow: none;
 }
 
+/* RSVP Closed Section */
+.rsvp-closed-section {
+  padding: 60px 40px;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.rsvp-closed-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.rsvp-closed-section h1 {
+  font-family: var(--font-display);
+  color: var(--terracotta);
+  font-size: 2.5rem;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.rsvp-closed-message {
+  font-size: 1.2rem;
+  color: var(--navy);
+  margin-bottom: 35px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.contact-info-box {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 30px 0;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.contact-message {
+  font-size: 1.1rem;
+  color: var(--navy);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.phone-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin: 15px 0;
+}
+
+.phone-icon {
+  font-size: 1.5rem;
+}
+
+.phone-number {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--terracotta);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.phone-number:hover {
+  color: var(--terracotta-dark);
+  transform: scale(1.05);
+}
+
+.thank-you-message {
+  font-size: 1.1rem;
+  color: var(--sage);
+  font-style: italic;
+  margin: 25px 0;
+  line-height: 1.6;
+}
+
 /* Confirmation Section */
 .confirmation-section {
   padding: 60px 40px;
@@ -682,5 +765,40 @@
 
   .divider span {
     padding: 0 15px;
+  }
+
+  .rsvp-closed-section {
+    padding: 40px 20px;
+  }
+
+  .rsvp-closed-section h1 {
+    font-size: 2rem;
+  }
+
+  .rsvp-closed-message {
+    font-size: 1.1rem;
+  }
+
+  .contact-info-box {
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .phone-contact {
+    padding: 15px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .phone-number {
+    font-size: 1.2rem;
+  }
+
+  .contact-message {
+    font-size: 1rem;
+  }
+
+  .thank-you-message {
+    font-size: 1rem;
   }
 }
