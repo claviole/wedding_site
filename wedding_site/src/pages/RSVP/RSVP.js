@@ -7,7 +7,7 @@ const RSVP = () => {
   const navigate = useNavigate();
 
   // Check if RSVP deadline has passed (September 7th, 2025)
-  const rsvpDeadline = new Date("2025-09-07T23:59:59");
+  const rsvpDeadline = new Date("2025-09-10T23:59:59");
   const currentDate = new Date();
   const isRSVPClosed = currentDate > rsvpDeadline;
 
